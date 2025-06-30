@@ -1,6 +1,7 @@
 import express from "express";
 import path from "path";
 import { config } from "dotenv";
+import { initDatabase } from "./db/queries";
 
 config();
 
@@ -13,6 +14,15 @@ app.use(express.urlencoded({ extended: true }));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+initDatabase()
+  .then(() => {
+    console.log("Connected to the database successfully!");
+
+    app.listen(PORT, () => {
+      console.log(`Server running on http://localhost:${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("Failed to initialize database:", err);
+    process.exit(1);
+  });
