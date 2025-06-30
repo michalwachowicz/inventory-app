@@ -10,9 +10,11 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/styles.css" />
-    <title><%= title %></title>
+    <title><%= locals.title || "Document" %></title>
   </head>
   <body>
-    <%- include(partialName) %>
+    <%- include("partials/navbar") %> <% if (locals.viewName) { %>
+    <main><%- include(viewName) %></main>
+    <% } %>
   </body>
 </html>

@@ -1,3 +1,7 @@
+:root {
+  --color-primary: #4f46e5;
+}
+
 * {
   box-sizing: border-box;
   padding: 0;
@@ -8,4 +12,34 @@ body {
   font-family: "Inter", Arial, Helvetica, sans-serif;
   background-color: #121212;
   color: #ededed;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.navbar {
+  padding: 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.navbar__container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar__logo {
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--color-primary);
+}
+
+.navbar__btns {
+  display: flex;
+  gap: 1rem;
 }
