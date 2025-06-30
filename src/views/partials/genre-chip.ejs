@@ -6,7 +6,7 @@
   <div class="genre-chip__container">
     <% if (isSelected) { %>
     <button aria-label="close genre">
-      <img src="/assets/icons/close.svg" alt="" width="28" height="28" />
+      <img src="/assets/icons/close.svg" alt="" width="32" height="32" />
     </button>
     <% } %>
 
@@ -14,18 +14,18 @@
       class="genre-chip__chip<%= isSelected ? ' genre-chip__chip--selected' : '' %>"
     >
       <%= isSelected ? locals.selectedGenre.name : "Genres" %>
-      <img src="/assets/icons/dropdown.svg" alt="" width="20" height="20" />
+      <img src="/assets/icons/dropdown.svg" alt="" width="24" height="24" />
     </button>
   </div>
 
   <% if (isSelected) { %>
   <div class="genre-chip__container">
     <button aria-label="edit genre">
-      <img src="/assets/icons/edit.svg" alt="" width="24" height="24" />
+      <img src="/assets/icons/edit.svg" alt="" width="28" height="28" />
     </button>
 
     <button aria-label="delete genre">
-      <img src="/assets/icons/delete.svg" alt="" width="24" height="24" />
+      <img src="/assets/icons/delete.svg" alt="" width="28" height="28" />
     </button>
   </div>
   <% } %>
