@@ -1,5 +1,6 @@
 :root {
   --color-primary: #4f46e5;
+  --color-text: #ededed;
 }
 
 * {
@@ -11,10 +12,13 @@
 body {
   font-family: "Inter", Arial, Helvetica, sans-serif;
   background-color: #121212;
-  color: #ededed;
+  color: var(--color-text);
 }
 
 button {
+  font: inherit;
+  color: inherit;
+  line-height: 0;
   background: none;
   border: none;
   cursor: pointer;
@@ -42,4 +46,32 @@ button {
 .navbar__btns {
   display: flex;
   gap: 1rem;
+}
+
+.genre-chip {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.genre-chip__container {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.genre-chip__chip {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+  border-radius: 100px;
+  border: 1px solid var(--color-text);
+}
+
+.genre-chip__chip--selected {
+  background-color: #414141;
+  box-shadow: 0px 0px 12px 0px rgba(99, 102, 241, 0.75);
 }
