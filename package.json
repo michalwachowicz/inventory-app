@@ -1,0 +1,33 @@
+{
+  "name": "inventory-app",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "dev": "ts-node-dev src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michalwachowicz/inventory-app.git"
+  },
+  "keywords": [],
+  "author": "Michał Wachowicz",
+  "bugs": {
+    "url": "https://github.com/michalwachowicz/inventory-app/issues"
+  },
+  "homepage": "https://github.com/michalwachowicz/inventory-app#readme",
+  "dependencies": {
+    "dotenv": "^17.0.0",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "@types/ejs": "^3.1.5",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.0.7",
+    "@types/pg": "^8.15.4",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.8.3"
+  }
+}
