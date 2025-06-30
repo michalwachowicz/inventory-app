@@ -1,5 +1,3 @@
-<% if (locals.navbar && (locals.navbar === "full" || locals.navbar === "basic"))
-{ %>
 <header class="navbar">
   <div class="navbar__container">
     <a href="/" class="navbar__logo">BookInventory</a>
@@ -15,6 +13,7 @@
     </div>
   </div>
 
-  <% if (locals.navbar === "full") { %> <%- include("genre-chip") %> <% } %>
+  <% if (locals.navbar === "full") { %>
+  <%- include("genre-chip") %>
+  <% } %>
 </header>
-<% } %>

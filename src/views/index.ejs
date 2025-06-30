@@ -13,8 +13,14 @@
     <title><%= locals.title || "Document" %></title>
   </head>
   <body>
-    <%- include("partials/navbar") %> <% if (locals.viewName) { %>
+    <% const showNavbar = locals.navbar === "full" || locals.navbar === "basic"; %>
+
+    <% if (showNavbar) { %>
+    <%- include("partials/navbar") %>
+    <% }; %>
+
+    <% if (locals.viewName) { %>
     <main><%- include(viewName) %></main>
-    <% } %>
+    <% }; %>
   </body>
 </html>
