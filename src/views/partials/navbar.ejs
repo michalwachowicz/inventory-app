@@ -4,14 +4,24 @@
 
     <div class="navbar__btns">
       <button
+        id="btn-searchbar"
         class="navbar__btn"
         aria-label="open searchbar"
-        id="btn-searchbar"
+        aria-controls="searchbar"
+        aria-haspopup="dialog"
+        aria-expanded="false"
       >
         <img src="/assets/icons/search.svg" alt="" width="32" height="32" />
       </button>
 
-      <button class="navbar__btn" aria-label="add menu" id="btn-add-menu">
+      <button
+        id="btn-add-menu"
+        class="navbar__btn navbar__btn--menu"
+        aria-label="open add menu"
+        aria-controls="add-menu"
+        aria-haspopup="menu"
+        aria-expanded="false"
+      >
         <img src="/assets/icons/add.svg" alt="" width="32" height="32" />
       </button>
     </div>
