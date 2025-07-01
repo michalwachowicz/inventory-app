@@ -1,5 +1,5 @@
-const popupBtns = [];
-const popups = [];
+let openBtn = null;
+let openPopup = null;
 
 function focusFirstElement(container) {
   if (!container) return;
@@ -20,7 +20,15 @@ function focusFirstElement(container) {
 function hidePopup(btn, popup) {
   popup.classList.add("hidden");
   btn.setAttribute("aria-expanded", false);
+
+  openBtn = null;
+  openPopup = null;
   btn.focus();
+}
+
+function hidePopupAndFocus(btn, popup) {
+  btn.focus();
+  hidePopup(btn, popup);
 }
 
 function setupPopup(btnSelector, popupSelector) {
@@ -28,26 +36,36 @@ function setupPopup(btnSelector, popupSelector) {
   const popup = document.querySelector(popupSelector);
   const content = popup.querySelector(".popup");
 
-  popupBtns.push(btn);
-  popups.push(popup);
-
   btn.addEventListener("click", () => {
-    popupBtns.forEach((p) => p.setAttribute("aria-expanded", false));
-    popups.forEach((p) => p.classList.add("hidden"));
+    if (openPopup && openPopup !== popup) hidePopup(openBtn, openPopup);
+
+    if (!popup.classList.contains("hidden")) {
+      hidePopup(btn, popup);
+      return;
+    }
 
     popup.classList.remove("hidden");
     btn.setAttribute("aria-expanded", true);
 
+    openBtn = btn;
+    openPopup = popup;
+
     focusFirstElement(popup);
   });
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key !== "Escape") return;
-    hidePopup(btn, popup);
-  });
-
-  popup.addEventListener("click", (e) => {
-    if (content.contains(e.target)) return;
-    hidePopup(btn, popup);
-  });
 }
+
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "Escape" || !openPopup) return;
+  hidePopupAndFocus(openBtn, openPopup);
+});
+
+document.addEventListener("click", (e) => {
+  if (!openPopup) return;
+
+  const content = openPopup.querySelector(".popup");
+  const element = content || openPopup;
+
+  if (openBtn.contains(e.target) || element.contains(e.target)) return;
+
+  hidePopupAndFocus(openBtn, openPopup);
+});
