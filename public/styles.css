@@ -24,6 +24,10 @@ button {
   cursor: pointer;
 }
 
+.hidden {
+  display: none !important;
+}
+
 .navbar {
   padding: 1rem 1.5rem;
   max-width: 900px;
@@ -74,4 +78,68 @@ button {
 .genre-chip__chip--selected {
   background-color: #414141;
   box-shadow: 0px 0px 12px 0px rgba(99, 102, 241, 0.75);
+}
+
+.dialog {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+.dialog__backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+.dialog__content {
+  position: relative;
+  border-radius: 0.5rem;
+  background-color: #1a1a1a;
+  z-index: 1;
+}
+
+.input__input {
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #333333;
+  font-size: 1.125rem;
+  padding: 0.875rem 1rem;
+  color: var(--color-text);
+  width: 100%;
+}
+
+.input__input--search {
+  padding-right: 3rem;
+}
+
+.input__input::placeholder {
+  color: #999999;
+}
+
+.input__input:focus {
+  outline: 2px solid var(--color-primary);
+}
+
+.searchbar__form {
+  position: relative;
+  padding: 0.75rem;
+  width: 100%;
+  margin: 1.5rem;
+  max-width: 540px;
+}
+
+.searchbar__btn {
+  position: absolute;
+  top: 50%;
+  right: 1.375rem;
+  transform: translateY(-50%);
 }
