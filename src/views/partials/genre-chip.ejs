@@ -11,11 +11,14 @@
     <% } %>
 
     <button
+      id="btn-open-genres"
       class="genre-chip__chip<%= isSelected ? ' genre-chip__chip--selected' : '' %>"
     >
       <%= isSelected ? locals.selectedGenre.name : "Genres" %>
       <img src="/assets/icons/dropdown.svg" alt="" width="24" height="24" />
     </button>
+
+    <%- include("genres-menu") %>
   </div>
 
   <% if (isSelected) { %>

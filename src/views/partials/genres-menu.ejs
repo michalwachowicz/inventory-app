@@ -1,0 +1,42 @@
+<div id="genres-menu" class="genres hidden">
+  <button
+    id="btn-close-genres"
+    class="btn genres__btn--close"
+    aria-label="close genres menu"
+  >
+    <img src="/assets/icons/close.svg" alt="" width="32" height="32" />
+  </button>
+
+  <div class="genres__container">
+    <% if (locals.genres && locals.genres.length > 0) { %>
+    <nav class="genres__nav">
+      <ul class="genres__list">
+        <% locals.genres.forEach((genre) => { %>
+        <li class="genres__list-item">
+          <a class="genres__link" href="/genre/<%= genre.id %>">
+            <%= genre.name %>
+          </a>
+        </li>
+        <% }); %>
+      </ul>
+    </nav>
+    <% } else { %>
+    <div class="genres__empty">
+      <img
+        class="genres__img--empty"
+        src="/assets/images/sad-book.svg"
+        alt="A sad book"
+      />
+      <p class="genres__desc">
+        It’s empty here...<br />
+        Add a genre to start organizing your shelf
+      </p>
+    </div>
+    <% } %>
+
+    <button class="btn btn--icon btn--primary genres__btn--add">
+      <img src="/assets/icons/add.svg" alt="" width="24" height="24" />
+      Add new genre
+    </button>
+  </div>
+</div>

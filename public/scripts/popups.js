@@ -31,10 +31,9 @@ function hidePopupAndFocus(btn, popup) {
   hidePopup(btn, popup);
 }
 
-function setupPopup(btnSelector, popupSelector) {
+function setupPopup(btnSelector, popupSelector, closeBtnSelector) {
   const btn = document.querySelector(btnSelector);
   const popup = document.querySelector(popupSelector);
-  const content = popup.querySelector(".popup");
 
   btn.addEventListener("click", () => {
     if (openPopup && openPopup !== popup) hidePopup(openBtn, openPopup);
@@ -49,6 +48,13 @@ function setupPopup(btnSelector, popupSelector) {
 
     openBtn = btn;
     openPopup = popup;
+
+    const closeBtnElement = document.querySelector(closeBtnSelector);
+    if (closeBtnElement) {
+      closeBtnElement.addEventListener("click", () => {
+        hidePopupAndFocus(openBtn, openPopup);
+      });
+    }
 
     focusFirstElement(popup);
   });

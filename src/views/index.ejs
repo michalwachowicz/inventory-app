@@ -13,7 +13,8 @@
     <title><%= locals.title || "Document" %></title>
   </head>
   <body>
-    <% const showNavbar = locals.navbar === "full" || locals.navbar === "basic"; %>
+    <% const isFullNavbar = locals.navbar === "full"; %>
+    <% const showNavbar = isFullNavbar || locals.navbar === "basic"; %>
 
     <% if (showNavbar) { %>
     <%- include("partials/navbar") %>
@@ -29,6 +30,10 @@
 
     <% if (showNavbar) { %>
     <script src="/scripts/navbar.js"></script>
+    <% }; %>
+
+    <% if (isFullNavbar) { %>
+    <script src="/scripts/genres.js"></script>
     <% }; %>
   </body>
 </html>

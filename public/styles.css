@@ -25,6 +25,29 @@ button {
   cursor: pointer;
 }
 
+.btn {
+  transition: transform 0.5s ease-out;
+}
+
+.btn:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease-in;
+}
+
+.btn--primary {
+  font-weight: 700;
+  font-size: 1.125rem;
+  border-radius: 0.25rem;
+  background-color: var(--color-primary);
+}
+
+.btn--icon {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1.5rem;
+}
+
 .hidden {
   display: none !important;
 }
@@ -172,6 +195,69 @@ button {
   font-size: 1.125rem;
   border-radius: 0.5rem;
   padding: 0.75rem;
+}
+
+.genres {
+  display: flex;
+  position: fixed;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  background-color: rgba(18, 18, 18, 0.6);
+  backdrop-filter: blur(10px);
+}
+
+.genres__container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4rem;
+}
+
+.genres__btn--close {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  width: 2rem;
+  height: 2rem;
+}
+
+.genres__btn--add {
+  margin-top: 3rem;
+}
+
+.genres__list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  list-style: none;
+  font-size: 1.5rem;
+  font-weight: 700;
+  gap: 2.5rem;
+  max-height: 50vh;
+  overflow: auto;
+}
+
+.genres__link {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.genres__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 20rem;
+  gap: 1rem;
+}
+
+.genres__desc {
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
 }
 
 @keyframes fade-in {
