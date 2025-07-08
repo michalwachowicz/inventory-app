@@ -1,17 +1,14 @@
 import { Response } from "express";
-
-interface Genre {
-  id: number;
-  name: string;
-}
+import { Genre } from "../types/genre";
+import { getGenres } from "../db/queries";
 
 interface RenderOptions {
   viewName: string;
   title?: string;
   navbar?: "basic" | "full";
-  genres?: Genre[];
 }
 
-export default function renderView(res: Response, options: RenderOptions) {
-  res.render("index", options);
+export async function renderView(res: Response, options: RenderOptions) {
+  const genres: Genre[] = options.navbar === "full" ? await getGenres() : [];
+  res.render("index", { ...options, genres });
 }
