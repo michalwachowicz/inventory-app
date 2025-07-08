@@ -34,9 +34,6 @@
     </div>
     <% } %>
 
-    <button class="btn btn--icon btn--primary genres__btn--add">
-      <img src="/assets/icons/add.svg" alt="" width="24" height="24" />
-      Add new genre
-    </button>
+    <%- include("add-button", { classes: "genres__btn--add", title: "Add new genre"}) %>
   </div>
 </div>
