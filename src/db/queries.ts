@@ -1,3 +1,4 @@
+import { Book } from "../types/book";
 import { Genre } from "../types/genre";
 import pool from "./pool";
 
@@ -17,8 +18,10 @@ async function createGenresTable() {
 
 async function createBooksTable() {
   await pool.query(`CREATE TABLE IF NOT EXISTS books (
-    isbn VARCHAR(20) PRIMARY KEY,
+    id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+    isbn VARCHAR(20) NOT NULL,
     title VARCHAR(255) NOT NULL,
+    cover VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
     publication_year INTEGER NOT NULL,
     pages INTEGER NOT NULL,
@@ -43,5 +46,12 @@ export async function initDatabase() {
 
 export async function getGenres(): Promise<Genre[]> {
   const { rows } = await pool.query(`SELECT * FROM genres`);
+  return rows;
+}
+
+export async function getRecentlyAddedBooks(): Promise<Book[]> {
+  const { rows } = await pool.query(
+    `SELECT * FROM books ORDER BY id DESC LIMIT 4`,
+  );
   return rows;
 }
