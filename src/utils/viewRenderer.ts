@@ -1,16 +1,12 @@
 import { Response } from "express";
 import { Genre } from "../types/genre";
 import { getGenres } from "../db/queries";
-import { Book } from "../types/book";
+import { RenderOptions } from "../types/render-options";
 
-interface RenderOptions {
-  viewName: string;
-  title?: string;
-  navbar?: "basic" | "full";
-  results?: Book[];
-}
-
-export async function renderView(res: Response, options: RenderOptions) {
+export async function renderView<T extends RenderOptions = RenderOptions>(
+  res: Response,
+  options: T,
+) {
   const genres: Genre[] = options.navbar === "full" ? await getGenres() : [];
   res.render("index", { ...options, genres });
 }
