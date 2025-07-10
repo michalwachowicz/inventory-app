@@ -1,4 +1,5 @@
-<% const isFilled = locals.results && locals.results.length > 0; %>
+<% const isFilled = locals.recentlyAddedBooks &&
+locals.recentlyAddedBooks.length > 0; %>
 
 <div class="container home">
   <div class="home__hero">
@@ -37,13 +38,13 @@
   <div class="home__recent">
     <h2 class="home__subtitle">Recently Added</h2>
     <ul class="book-list">
-      <% locals.results.forEach((result) => { %>
+      <% locals.recentlyAddedBooks.forEach((book) => { %>
       <li class="book-list__item">
-        <a class="book-list__link" href="/book/<%= result.id %>">
+        <a class="book-list__link" href="/book/<%= book.id %>">
           <img
             class="book-list__img"
-            src="<%= result.cover %>"
-            alt="<%= result.title %> by <%= result.author %>"
+            src="<%= book.cover %>"
+            alt="<%= book.title %> by <%= book.author %>"
             loading="lazy"
             width="180"
             height="275"
