@@ -2,6 +2,7 @@ import express from "express";
 import path from "path";
 import { config } from "dotenv";
 import { initDatabase } from "./db/queries";
+import homeRouter from "./routes/homeRouter";
 
 config();
 
@@ -13,6 +14,8 @@ app.use(express.urlencoded({ extended: true }));
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
+
+app.use("/", homeRouter);
 
 initDatabase()
   .then(() => {
