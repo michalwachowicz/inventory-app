@@ -1,36 +1,38 @@
 <header class="navbar">
-  <div class="navbar__container">
-    <a href="/" class="navbar__logo">BookInventory</a>
+  <div class="navbar__content">
+    <div class="navbar__container">
+      <a href="/" class="navbar__logo">BookInventory</a>
 
-    <div class="navbar__btns">
-      <button
-        id="btn-searchbar"
-        class="navbar__btn"
-        aria-label="open searchbar"
-        aria-controls="searchbar"
-        aria-haspopup="dialog"
-        aria-expanded="false"
-      >
-        <img src="/assets/icons/search.svg" alt="" width="32" height="32" />
-      </button>
-
-      <div class="navbar__btn-container">
+      <div class="navbar__btns">
         <button
-          id="btn-add-menu"
+          id="btn-searchbar"
           class="navbar__btn"
-          aria-label="open add menu"
-          aria-controls="add-menu"
-          aria-haspopup="menu"
+          aria-label="open searchbar"
+          aria-controls="searchbar"
+          aria-haspopup="dialog"
           aria-expanded="false"
         >
-          <img src="/assets/icons/add.svg" alt="" width="32" height="32" />
+          <img src="/assets/icons/search.svg" alt="" width="32" height="32" />
         </button>
-        <%- include("add-menu") %>
+
+        <div class="navbar__btn-container">
+          <button
+            id="btn-add-menu"
+            class="navbar__btn"
+            aria-label="open add menu"
+            aria-controls="add-menu"
+            aria-haspopup="menu"
+            aria-expanded="false"
+          >
+            <img src="/assets/icons/add.svg" alt="" width="32" height="32" />
+          </button>
+          <%- include("add-menu") %>
+        </div>
       </div>
     </div>
-  </div>
 
-  <% if (locals.navbar === "full") { %>
-  <%- include("genre-chip") %>
-  <% } %>
+    <% if (locals.navbar === "full") { %>
+    <%- include("genre-chip") %>
+    <% } %>
+  </div>
 </header>
