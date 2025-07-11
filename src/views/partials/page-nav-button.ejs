@@ -1,0 +1,13 @@
+<% if ((isNext && currentPage !== totalPages) || (!isNext && currentPage !== 1)) { %>
+<li>
+  <a
+    class="btn btn--page btn--page-nav"
+    href="?<%= baseQueryString %><%= baseQueryString ? '&' : '' %>currentPage=<%= isNext ? currentPage + 1 : currentPage - 1 %>"
+  >
+    <img
+      src="/assets/icons/chevron-<%= isNext ? 'right' : 'left' %>.svg"
+      alt="<%= isNext ? 'next' : 'previous' %> page"
+    />
+  </a>
+</li>
+<% } %>

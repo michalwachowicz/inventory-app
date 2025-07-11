@@ -1,0 +1,46 @@
+<% if (locals.pages && locals.pages >= 1 && locals.currentPage &&
+locals.currentPage >= 1) { %>
+
+<% const maxDisplayedPages = 5; %>
+<% const totalPages = locals.pages; %>
+<% const currentPage = locals.currentPage; %>
+<% const baseQueryString = locals.baseQueryString || ""; %>
+
+<div class="pagination">
+  <%- include("page-nav-button", { isNext: false, currentPage, totalPages, baseQueryString }) %>
+
+  <% 
+    const pages = [];
+    if (totalPages <= maxDisplayedPages) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else {
+      pages.push(1);
+
+      if (currentPage > 3) pages.push('...');
+      
+      const start = Math.max(2, currentPage - 1);
+      const end = Math.min(currentPage + 1, totalPages - 1);
+
+      for (let i = start; i <= end; i++) pages.push(i);
+
+      if (currentPage < totalPages - 2) pages.push('...');
+      pages.push(totalPages);
+    }
+  %>
+
+  <% pages.forEach((page, i) => { %>
+    <% if (page === '...') { %>
+      <li class="pagination__item pagination__separator">...</li>
+    <% } else { %>
+      <%- include("page-button", {
+        page,
+        currentPage,
+        baseQueryString,
+        active: page === currentPage,
+      }) %>
+    <% } %>
+  <% }) %>
+
+  <%- include("page-nav-button", { isNext: true, currentPage, totalPages, baseQueryString }) %>
+</div>
+<% } %>

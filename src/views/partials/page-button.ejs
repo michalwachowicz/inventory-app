@@ -1,0 +1,8 @@
+<li class="pagination__item">
+  <a
+    class="btn btn--page <%= active ? 'btn--page-active' : '' %>"
+    href="?<%= baseQueryString %><%= baseQueryString ? '&' : '' %>currentPage=<%= page %>"
+  >
+    <%= page %>
+  </a>
+</li>
