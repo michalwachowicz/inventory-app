@@ -1,0 +1,56 @@
+<div class="container results-page">
+  <% if (locals.pageTitle) { %>
+  <div class="results-page__header">
+    <h1 class="results-page__title"><%= pageTitle %></h1>
+
+    <% if (locals.isAuthorPage) { %>
+    <!-- TODO: Add CRUD buttons -->
+    <% } %>
+  </div>
+  <% } %>
+
+  <div>
+    <% if (!locals.results || locals.results.length === 0) { %>
+
+    <div class="results-page__empty-state">
+      <!-- prettier-ignore-start -->
+      <%- include("partials/empty-state", {
+        text: "No results found. Try searching for a different title, ISBN, author, or return to homepage." })
+      %>
+      <!-- prettier-ignore-end -->
+    </div>
+
+    <% } else { %>
+
+    <ul class="results-list">
+      <% locals.results.forEach((book) => { %>
+      <li class="results-list__item">
+        <a class="results-list__link" href="/book/<%= book.id %>">
+          <img
+            class="results-list__img"
+            src="<%= book.cover %>"
+            alt="<%= book.title %> by <%= book.author %>"
+            loading="lazy"
+            width="180"
+            height="275"
+          />
+
+          <div class="results-list__info">
+            <h2 class="results-list__title"><%= book.title %></h2>
+            <div class="results-list__author"><%= book.author %></div>
+            <p class="results-list__year"><%= book.publication_year %></p>
+          </div>
+        </a>
+      </li>
+      <% }); %>
+    </ul>
+
+    <%- include("partials/pagination", {
+      pages: locals.pages,
+      currentPage: locals.currentPage,
+      baseQueryString: locals.baseQueryString || "",
+    }) %>
+
+    <% } %>
+  </div>
+</div>
