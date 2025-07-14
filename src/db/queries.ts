@@ -55,3 +55,65 @@ export async function getRecentlyAddedBooks(): Promise<Book[]> {
   );
   return rows;
 }
+
+export async function getBooksByGenreAndQuery(options: {
+  genreId?: number;
+  query?: string;
+  page?: number;
+}): Promise<{ books: Book[]; pages: number }> {
+  const { genreId, query, page = 1 } = options;
+  const params: (number | string)[] = [];
+  const conditions: string[] = [];
+
+  const limit = 10;
+  const offset = (page - 1) * limit;
+
+  if (genreId) {
+    conditions.push(`genre_id = $${params.length + 1}`);
+    params.push(genreId);
+  }
+
+  if (query) {
+    const searchParam = `%${query}%`;
+    const placeholder = params.length + 1;
+
+    const searchConditions = [
+      `books.title ILIKE $${placeholder}`,
+      `authors.name ILIKE $${placeholder}`,
+      `books.isbn ILIKE $${placeholder}`,
+    ];
+
+    conditions.push(`(${searchConditions.join(" OR ")})`);
+    params.push(searchParam);
+  }
+
+  const whereClause = conditions.length
+    ? `WHERE ${conditions.join(" AND ")}`
+    : "";
+
+  const countSql = `
+    SELECT COUNT(*) FROM books 
+    INNER JOIN authors ON books.author_id = authors.id
+    INNER JOIN genres ON books.genre_id = genres.id 
+    ${whereClause}
+  `;
+
+  const countResult = await pool.query(countSql, params);
+  const totalCount = parseInt(countResult.rows[0].count, 10);
+  const pages = Math.ceil(totalCount / limit);
+
+  const booksSql = `
+    SELECT books.*, authors.name AS author, genres.name AS genre 
+    FROM books
+    INNER JOIN authors ON books.author_id = authors.id
+    INNER JOIN genres ON books.genre_id = genres.id 
+    ${whereClause} 
+    ORDER BY id DESC 
+    LIMIT ${limit} 
+    OFFSET ${offset} 
+  `;
+
+  const booksResults = await pool.query(booksSql, params);
+
+  return { books: booksResults.rows, pages };
+}
