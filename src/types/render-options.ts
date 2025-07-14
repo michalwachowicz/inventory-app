@@ -14,4 +14,11 @@ export interface HomeRenderOptions extends RenderOptions {
 export interface ResultsRenderOptions extends RenderOptions {
   results: Book[];
   pages: number;
+  currentPage: number;
+  baseQueryString: string;
+  pageTitle?: string;
+}
+
+export interface QueryRenderOptions extends ResultsRenderOptions {
+  query?: string;
 }

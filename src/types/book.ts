@@ -8,4 +8,6 @@ export interface Book {
   pages: number;
   authorId: number;
   genreId: number;
+  author?: string;
+  genre?: string;
 }
