@@ -3,6 +3,7 @@ import path from "path";
 import { config } from "dotenv";
 import { initDatabase } from "./db/queries";
 import homeRouter from "./routes/homeRouter";
+import resultsRouter from "./routes/results-router";
 
 config();
 
@@ -16,6 +17,7 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 app.use("/", homeRouter);
+app.use("/results", resultsRouter);
 
 initDatabase()
   .then(() => {
