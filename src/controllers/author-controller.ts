@@ -1,23 +1,34 @@
 import { Request, Response } from "express";
 import { getAuthorById, getBooksByAuthor } from "../db/queries";
 import { renderView } from "../utils/viewRenderer";
-import { ResultsRenderOptions } from "../types/render-options";
+import {
+  ErrorRenderOptions,
+  ResultsRenderOptions,
+} from "../types/render-options";
 import { buildBaseQueryString } from "../utils/base-query";
 
 export async function getAuthorBooks(req: Request, res: Response) {
   const authorId = Number(req.params.authorId);
 
-  // TODO: Render error page
   if (isNaN(authorId)) {
-    res.status(400).json({ error: "Invalid author ID" });
+    renderView<ErrorRenderOptions>(res, {
+      viewName: "error",
+      title: "Invalid Author ID",
+      navbar: "basic",
+      errorMessage: "Author ID must be a number.",
+    });
     return;
   }
 
   const author = await getAuthorById(authorId);
 
-  // TODO: Render author not found page
   if (!author) {
-    res.status(404).json({ error: "Author not found" });
+    renderView<ErrorRenderOptions>(res, {
+      viewName: "error",
+      title: "Author Not Found",
+      navbar: "basic",
+      errorMessage: `Author with ID ${authorId} was not found.`,
+    });
     return;
   }
 
