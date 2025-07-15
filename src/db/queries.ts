@@ -1,5 +1,6 @@
 import { Book } from "../types/book";
 import { Genre } from "../types/genre";
+import { Author } from "../types/author";
 import pool from "./pool";
 
 async function createAuthorsTable() {
@@ -116,4 +117,45 @@ export async function getBooksByGenreAndQuery(options: {
   const booksResults = await pool.query(booksSql, params);
 
   return { books: booksResults.rows, pages };
+}
+
+export async function getBooksByAuthor(
+  authorId: number,
+  page: number = 1,
+): Promise<{ books: Book[]; pages: number }> {
+  const limit = 10;
+  const offset = (page - 1) * limit;
+
+  const countSql = await pool.query(
+    `SELECT COUNT(*) FROM books 
+     INNER JOIN authors ON books.author_id = authors.id 
+     INNER JOIN genres ON books.genre_id = genres.id 
+     WHERE author_id = $1`,
+    [authorId],
+  );
+
+  const totalCount = parseInt(countSql.rows[0].count, 10);
+  const pages = Math.ceil(totalCount / limit);
+
+  const booksSql = await pool.query(
+    `SELECT books.*, authors.name AS author, genres.name AS genre 
+     FROM books 
+     INNER JOIN authors ON books.author_id = authors.id 
+     INNER JOIN genres ON books.genre_id = genres.id 
+     WHERE books.author_id = $1 
+     ORDER BY id DESC 
+     LIMIT $2 OFFSET $3`,
+    [authorId, limit, offset],
+  );
+
+  return { books: booksSql.rows, pages };
+}
+
+export async function getAuthorById(authorId: number): Promise<Author | null> {
+  const { rows } = await pool.query(
+    `SELECT id, name FROM authors WHERE id = $1`,
+    [authorId],
+  );
+
+  return rows.length ? rows[0] : null;
 }
