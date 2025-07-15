@@ -11,6 +11,10 @@ export interface HomeRenderOptions extends RenderOptions {
   recentlyAddedBooks: Book[];
 }
 
+export interface ErrorRenderOptions extends RenderOptions {
+  errorMessage: string;
+}
+
 export interface ResultsRenderOptions extends RenderOptions {
   results: Book[];
   pages: number;
