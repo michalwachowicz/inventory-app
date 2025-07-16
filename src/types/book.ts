@@ -4,10 +4,10 @@ export interface Book {
   title: string;
   description: string;
   cover: string;
-  publicationYear: number;
+  publication_year: number;
   pages: number;
-  authorId: number;
-  genreId: number;
+  author_id: number;
+  genre_id: number;
   author?: string;
   genre?: string;
 }

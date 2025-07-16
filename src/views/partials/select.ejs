@@ -6,7 +6,7 @@
 
   <div class="input__select-wrapper">
     <select class="input__field input__select" name="<%= field %>" id="<%= field %>">
-      <option value="" disabled <%= !book?.[field + 'Id'] ? 'selected' : '' %>></option>
+      <option value="" disabled <%= !book?.[field + '_id'] ? 'selected' : '' %>></option>
 
       <% elements.forEach(element => {
         const isSelected = book?.[field + 'Id'] === element.id ? 'selected' : '';
