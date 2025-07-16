@@ -1,0 +1,141 @@
+<% const actionCapitalized = locals.action[0].toUpperCase() + locals.action.slice(1) %>
+
+<div class="container book-form">
+  <h1 class="book-form__title"><%= actionCapitalized %> a Book</h1>
+
+  <form
+    class="book-form__form"
+    action="/book/<%= locals.action %>"
+    method="post"
+  >
+    <div class="book-form__container">
+      <div class="book-form__input-group">
+        <div class="input__wrapper">
+          <div class="input__label-wrapper">
+            <label class="input__label" for="isbn">
+              ISBN
+              <span class="input__asterisk" aria-hidden="true">*</span>
+            </label>
+
+            <!-- TODO: Create help tooltip -->
+            <div>?</div>
+          </div>
+
+          <input
+            class="input__field"
+            type="number"
+            id="isbn"
+            name="isbn"
+            value="<%= locals?.book?.isbn || '' %>"
+            aria-required="true"
+            required
+          />
+        </div>
+
+        <% if (locals.action !== "edit") { %>
+        <button class="btn btn--primary" type="button">Fetch</button>
+        <% } %>
+      </div>
+
+      <div class="input__wrapper">
+        <label class="input__label" for="title">
+          Title
+          <span class="input__asterisk" aria-hidden="true">*</span>
+        </label>
+
+        <input
+          class="input__field"
+          type="text"
+          id="title"
+          name="title"
+          value="<%= locals?.book?.title || '' %>"
+          required
+        />
+      </div>
+
+      <div class="book-form__input-group">
+        <%- include('partials/select', { field: 'author', title: 'Author',
+        elements: locals.authors, book: locals.book }) %>
+
+        <div>
+          Can't find author?
+          <button class="btn--form-add" type="button">Add new author</button>
+        </div>
+      </div>
+
+      <div class="book-form__input-group">
+        <%- include('partials/select', { field: 'genre', title: 'Genre',
+        elements: locals.genres, book: locals.book }) %>
+
+        <div>
+          Can't find genre?
+          <button class="btn--form-add" type="button">Add new genre</button>
+        </div>
+      </div>
+
+      <div class="input__wrapper">
+        <label class="input__label" for="year">
+          Publication Year
+          <span class="input__asterisk" aria-hidden="true">*</span>
+        </label>
+
+        <input
+          class="input__field"
+          type="number"
+          id="year"
+          name="year"
+          value="<%= locals?.book?.year || '' %>"
+          required
+        />
+      </div>
+
+      <div class="input__wrapper">
+        <label class="input__label" for="pages">
+          Number of Pages
+          <span class="input__asterisk" aria-hidden="true">*</span>
+        </label>
+
+        <input
+          class="input__field"
+          type="number"
+          id="pages"
+          name="pages"
+          value="<%= locals?.book?.pages || '' %>"
+          required
+        />
+      </div>
+
+      <div class="input__wrapper">
+        <label class="input__label" for="description">Description</label>
+        <textarea
+          id="description"
+          name="description"
+          class="input__field input__textarea"
+          oninput="this.parentNode.dataset.value = this.value"
+          rows="1"
+        >
+          <%= locals?.book?.description || '' %>
+        </textarea>
+      </div>
+
+      <div class="input__wrapper">
+        <label class="input__label" for="password">
+          Secret Password
+          <span class="input__asterisk" aria-hidden="true">*</span>
+        </label>
+
+        <input
+          class="input__field"
+          type="password"
+          id="password"
+          name="password"
+          required
+        />
+      </div>
+    </div>
+
+    <button class="btn btn--primary" type="submit">
+      <%= actionCapitalized %> Book
+    </button>
+  </form>
+</div>

@@ -1,0 +1,18 @@
+<div class="input__wrapper">
+  <label class="input__label" for="<%= field %>">
+    <%= title %>
+    <span class="input__asterisk" aria-hidden="true">*</span>
+  </label>
+
+  <div class="input__select-wrapper">
+    <select class="input__field input__select" name="<%= field %>" id="<%= field %>">
+      <option value="" disabled <%= !book?.[field + 'Id'] ? 'selected' : '' %>></option>
+
+      <% elements.forEach(element => {
+        const isSelected = book?.[field + 'Id'] === element.id ? 'selected' : '';
+      %>
+        <option value="<%= element.id %>" <%= isSelected %>><%= element.name %></option>
+      <% }); %>
+    </select>
+  </div>
+</div>
