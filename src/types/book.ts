@@ -2,7 +2,7 @@ export interface Book {
   id: number;
   isbn: string;
   title: string;
-  description: string;
+  description?: string;
   cover: string;
   publication_year: number;
   pages: number;

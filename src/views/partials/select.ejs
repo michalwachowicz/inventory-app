@@ -5,11 +5,11 @@
   </label>
 
   <div class="input__select-wrapper">
-    <select class="input__field input__select" name="<%= field %>" id="<%= field %>">
-      <option value="" disabled <%= !book?.[field + '_id'] ? 'selected' : '' %>></option>
+    <select class="input__field input__select" name="<%= field %>" id="<%= field %>" required>
+      <option value="" disabled <%= !book?.[field] ? 'selected' : '' %>></option>
 
       <% elements.forEach(element => {
-        const isSelected = book?.[field + 'Id'] === element.id ? 'selected' : '';
+        const isSelected = book?.[field] === element.id ? 'selected' : '';
       %>
         <option value="<%= element.id %>" <%= isSelected %>><%= element.name %></option>
       <% }); %>

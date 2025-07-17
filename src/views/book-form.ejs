@@ -80,7 +80,7 @@
       </div>
 
       <div class="book-form__input-group">
-        <%- include('partials/select', { field: 'author', title: 'Author',
+        <%- include('partials/select', { field: 'author_id', title: 'Author',
         elements: locals.authors, book: locals.book }) %>
 
         <div>
@@ -90,7 +90,7 @@
       </div>
 
       <div class="book-form__input-group">
-        <%- include('partials/select', { field: 'genre', title: 'Genre',
+        <%- include('partials/select', { field: 'genre_id', title: 'Genre',
         elements: locals.genres, book: locals.book }) %>
 
         <div>
@@ -116,7 +116,7 @@
       </div>
 
       <div class="input__wrapper">
-        <label class="input__label" for="year">
+        <label class="input__label" for="publication_year">
           Publication Year
           <span class="input__asterisk" aria-hidden="true">*</span>
         </label>
@@ -124,8 +124,8 @@
         <input
           class="input__field"
           type="number"
-          id="year"
-          name="year"
+          id="publication_year"
+          name="publication_year"
           value="<%= locals?.book?.publication_year || '' %>"
           required
         />
@@ -161,7 +161,7 @@
       </div>
 
       <div class="input__wrapper">
-        <label class="input__label" for="password">
+        <label class="input__label" for="secret_password">
           Secret Password
           <span class="input__asterisk" aria-hidden="true">*</span>
         </label>
@@ -169,8 +169,8 @@
         <input
           class="input__field"
           type="password"
-          id="password"
-          name="password"
+          id="secret_password"
+          name="secret_password"
           required
         />
       </div>

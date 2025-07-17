@@ -30,9 +30,9 @@ function setupBookFetcher() {
       const data = await res.json();
 
       document.querySelector("#title").value = data.title || "";
-      document.querySelector("#author").value =
+      document.querySelector("#author_id").value =
         data.author_id !== -1 ? data.author_id : "";
-      document.querySelector("#year").value =
+      document.querySelector("#publication_year").value =
         data.publication_year !== -1 ? data.publication_year : "";
       document.querySelector("#pages").value =
         data.pages !== -1 ? data.pages : "";
