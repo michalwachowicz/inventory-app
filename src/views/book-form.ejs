@@ -18,8 +18,32 @@
               <span class="input__asterisk" aria-hidden="true">*</span>
             </label>
 
-            <!-- TODO: Create help tooltip -->
-            <div>?</div>
+            <div class="tooltip" id="tooltip">
+              <button
+                type="button"
+                class="tooltip__btn"
+                aria-describedby="tooltip-desc"
+                aria-label="Fetch book data by ISBN"
+              >
+                <img src="/assets/icons/help.svg" alt="" />
+              </button>
+
+              <div role="tooltip" id="tooltip-desc" class="tooltip__content">
+                Enter the ISBN number of the book to fetch its data
+                automatically.
+
+                <div class="tooltip__link-wrapper">
+                  <a
+                    class="tooltip__link"
+                    href="https://isbnsearch.org/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Search the book's ISBN
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
 
           <input

@@ -47,5 +47,20 @@ function setupBookFetcher() {
   });
 }
 
+function setupTooltip() {
+  const tooltip = document.getElementById("tooltip");
+
+  tooltip.querySelector(".tooltip__btn").addEventListener("click", () => {
+    tooltip.classList.toggle("tooltip--show");
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!tooltip.contains(e.target)) {
+      tooltip.classList.remove("tooltip--show");
+    }
+  });
+}
+
 setupTextarea();
 setupBookFetcher();
+setupTooltip();
