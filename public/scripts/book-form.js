@@ -36,7 +36,7 @@ function setupBookFetcher() {
         data.publication_year !== -1 ? data.publication_year : "";
       document.querySelector("#pages").value =
         data.pages !== -1 ? data.pages : "";
-      // TODO: Add cover image
+      document.querySelector("#cover").value = data.cover || "";
     } catch (err) {
       alert("Failed to fetch book data.");
       console.error(err);

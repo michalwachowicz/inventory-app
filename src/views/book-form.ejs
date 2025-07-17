@@ -75,6 +75,22 @@
       </div>
 
       <div class="input__wrapper">
+        <label class="input__label" for="cover">
+          Cover Image URL
+          <span class="input__asterisk" aria-hidden="true">*</span>
+        </label>
+
+        <input
+          class="input__field"
+          type="url"
+          id="cover"
+          name="cover"
+          value="<%= locals?.book?.cover || '' %>"
+          required
+        />
+      </div>
+
+      <div class="input__wrapper">
         <label class="input__label" for="year">
           Publication Year
           <span class="input__asterisk" aria-hidden="true">*</span>
