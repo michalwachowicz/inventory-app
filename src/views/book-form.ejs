@@ -5,7 +5,7 @@
 
   <form
     class="book-form__form"
-    action="/book/<%= locals.action %>"
+    action="/book/<%= `${locals.action}${locals.action === 'edit' && locals.book?.id ? `/${locals.book.id}` : ''}` %>"
     method="post"
   >
     <div class="book-form__container">
