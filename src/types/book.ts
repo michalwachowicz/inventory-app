@@ -11,3 +11,8 @@ export interface Book {
   author?: string;
   genre?: string;
 }
+
+export type BookResponse = Omit<
+  Book,
+  "id" | "isbn" | "author" | "genre" | "genre_id" | "description"
+>;

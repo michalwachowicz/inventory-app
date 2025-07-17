@@ -6,6 +6,7 @@ import homeRouter from "./routes/homeRouter";
 import resultsRouter from "./routes/results-router";
 import authorRouter from "./routes/author-router";
 import bookRouter from "./routes/book-router";
+import apiRouter from "./routes/api-router";
 
 config();
 
@@ -22,6 +23,7 @@ app.use("/", homeRouter);
 app.use("/results", resultsRouter);
 app.use("/author", authorRouter);
 app.use("/book", bookRouter);
+app.use("/api", apiRouter);
 
 initDatabase()
   .then(() => {

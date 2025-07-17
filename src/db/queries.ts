@@ -178,3 +178,12 @@ export async function getBookById(bookId: number): Promise<Book | null> {
 
   return rows.length ? rows[0] : null;
 }
+
+export async function getAuthorByName(name: string): Promise<Author | null> {
+  const { rows } = await pool.query(
+    `SELECT * FROM authors WHERE name ILIKE $1`,
+    [name],
+  );
+
+  return rows.length ? rows[0] : null;
+}
