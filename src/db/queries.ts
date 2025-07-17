@@ -187,3 +187,10 @@ export async function getAuthorByName(name: string): Promise<Author | null> {
 
   return rows.length ? rows[0] : null;
 }
+
+export async function getSecretPassword(): Promise<string> {
+  const { rows } = await pool.query(
+    `SELECT password FROM secret_password WHERE id = 1`,
+  );
+  return rows.length ? rows[0].password : "";
+}
