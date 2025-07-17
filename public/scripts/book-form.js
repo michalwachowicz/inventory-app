@@ -49,15 +49,74 @@ function setupBookFetcher() {
 
 function setupTooltip() {
   const tooltip = document.getElementById("tooltip");
+  const tooltipBtn = document.getElementById("tooltip-btn");
+  const tooltipContent = document.getElementById("tooltip-desc");
 
-  tooltip.querySelector(".tooltip__btn").addEventListener("click", () => {
-    tooltip.classList.toggle("tooltip--show");
+  let isTriggerHovered = false;
+  let isTooltipHovered = false;
+  let hasBeenTriggered = false;
+
+  function showTooltip() {
+    tooltip.classList.add("tooltip--show");
+  }
+
+  function hideTooltip() {
+    tooltip.classList.remove("tooltip--show");
+    hasBeenTriggered = false;
+  }
+
+  function updateTooltipVisibility() {
+    const activeEl = document.activeElement;
+    const isFocusInside =
+      tooltipBtn.contains(activeEl) || tooltipContent.contains(activeEl);
+
+    if (
+      (isTriggerHovered || isTooltipHovered || isFocusInside) &&
+      hasBeenTriggered
+    ) {
+      showTooltip();
+    } else {
+      hideTooltip();
+    }
+  }
+
+  tooltipBtn.addEventListener("mouseenter", () => {
+    isTriggerHovered = true;
+    hasBeenTriggered = true;
+    updateTooltipVisibility();
   });
 
-  document.addEventListener("click", (e) => {
-    if (!tooltip.contains(e.target)) {
-      tooltip.classList.remove("tooltip--show");
-    }
+  tooltipBtn.addEventListener("mouseleave", () => {
+    isTriggerHovered = false;
+    setTimeout(updateTooltipVisibility, 100);
+  });
+
+  tooltipBtn.addEventListener("focusin", () => {
+    hasBeenTriggered = true;
+    updateTooltipVisibility();
+  });
+
+  tooltipBtn.addEventListener("focusout", () => {
+    setTimeout(updateTooltipVisibility, 100);
+  });
+
+  tooltipContent.addEventListener("mouseenter", () => {
+    if (!hasBeenTriggered) return;
+    isTooltipHovered = true;
+    updateTooltipVisibility();
+  });
+
+  tooltipContent.addEventListener("mouseleave", () => {
+    isTooltipHovered = false;
+    setTimeout(updateTooltipVisibility, 100);
+  });
+
+  tooltipContent.addEventListener("focusin", () => {
+    updateTooltipVisibility();
+  });
+
+  tooltipContent.addEventListener("focusout", () => {
+    setTimeout(updateTooltipVisibility, 100);
   });
 }
 
