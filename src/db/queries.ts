@@ -2,6 +2,7 @@ import { Book } from "../types/book";
 import { Genre } from "../types/genre";
 import { Author } from "../types/author";
 import pool from "./pool";
+import { get } from "http";
 
 async function createAuthorsTable() {
   await pool.query(`CREATE TABLE IF NOT EXISTS authors (
@@ -155,6 +156,24 @@ export async function getAuthorById(authorId: number): Promise<Author | null> {
   const { rows } = await pool.query(
     `SELECT id, name FROM authors WHERE id = $1`,
     [authorId],
+  );
+
+  return rows.length ? rows[0] : null;
+}
+
+export async function getAuthors(): Promise<Author[]> {
+  const { rows } = await pool.query(`SELECT * FROM authors`);
+  return rows;
+}
+
+export async function getBookById(bookId: number): Promise<Book | null> {
+  const { rows } = await pool.query(
+    `SELECT books.*, authors.name AS author, genres.name AS genre 
+     FROM books 
+     INNER JOIN authors ON books.author_id = authors.id
+     INNER JOIN genres ON books.genre_id = genres.id
+     WHERE books.id = $1`,
+    [bookId],
   );
 
   return rows.length ? rows[0] : null;

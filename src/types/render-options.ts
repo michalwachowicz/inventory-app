@@ -1,10 +1,19 @@
+import { Author } from "./author";
 import { Book } from "./book";
+import { Genre } from "./genre";
 
 export interface RenderOptions {
   viewName: string;
   title?: string;
   navbar?: "basic" | "full";
   selectedGenreId?: string;
+}
+
+export interface BookFormRenderOptions extends RenderOptions {
+  book?: Book;
+  action: "add" | "edit";
+  authors: Author[];
+  genres: Genre[];
 }
 
 export interface HomeRenderOptions extends RenderOptions {
