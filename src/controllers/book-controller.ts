@@ -127,6 +127,9 @@ export async function postBookAdd(req: Request, res: Response) {
   }
 
   try {
+    const bookExists = await checkBookByISBN(req.body.isbn);
+    if (bookExists) errors.isbn = "Book with this ISBN already exists";
+
     const isAuthorized = await checkPassword(req.body.secret_password);
     if (!isAuthorized) errors.secret_password = "Invalid password";
 
