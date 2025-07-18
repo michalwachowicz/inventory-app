@@ -11,9 +11,9 @@ import {
 } from "../db/queries";
 import {
   Book,
+  BookFormData,
+  BookFormSchema,
   BookResponse,
-  CreateBook,
-  CreateBookSchema,
 } from "../types/book";
 import { checkPassword } from "../utils/password-utils";
 import { ISBNSchema } from "../types/isbn";
@@ -112,9 +112,9 @@ export async function getBookAddForm(_: Request, res: Response) {
 
 export async function postBookAdd(req: Request, res: Response) {
   const errors: Record<string, string> = {};
-  const result = CreateBookSchema.safeParse(req.body);
+  const result = BookFormSchema.safeParse(req.body);
 
-  let book: CreateBook | null = null;
+  let book: BookFormData | null = null;
 
   if (!result.success) {
     for (const err of result.error.issues) {

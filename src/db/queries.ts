@@ -1,4 +1,4 @@
-import { Book, CreateBook } from "../types/book";
+import { Book, BookFormData } from "../types/book";
 import { Genre } from "../types/genre";
 import { Author } from "../types/author";
 import pool from "./pool";
@@ -194,7 +194,7 @@ export async function getSecretPassword(): Promise<string> {
   return rows.length ? rows[0].password : "";
 }
 
-export async function insertBook(book: CreateBook) {
+export async function insertBook(book: BookFormData) {
   await pool.query(
     `INSERT INTO books (
       isbn, title, cover, description, publication_year, pages, author_id, genre_id

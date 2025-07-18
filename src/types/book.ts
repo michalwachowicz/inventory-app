@@ -15,14 +15,14 @@ export const BookSchema = z.object({
   genre: z.string().optional(),
 });
 
-export const CreateBookSchema = BookSchema.omit({
+export const BookFormSchema = BookSchema.omit({
   id: true,
   author: true,
   genre: true,
 });
 
 export type Book = z.infer<typeof BookSchema>;
-export type CreateBook = z.infer<typeof CreateBookSchema>;
+export type BookFormData = z.infer<typeof BookFormSchema>;
 
 export type BookResponse = Omit<
   Book,
