@@ -1,3 +1,5 @@
+<% const error = errors?.[field]; %>
+
 <div class="input__wrapper">
   <label class="input__label" for="<%= field %>">
     <%= title %>
@@ -15,4 +17,8 @@
       <% }); %>
     </select>
   </div>
+
+  <% if (error) { %>
+  <div class="input__error"><%= error %></div>
+  <% } %>
 </div>

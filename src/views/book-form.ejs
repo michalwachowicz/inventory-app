@@ -49,13 +49,17 @@
 
           <input
             class="input__field"
-            type="number"
+            type="text"
             id="isbn"
             name="isbn"
             value="<%= locals?.book?.isbn || '' %>"
             aria-required="true"
             required
           />
+
+          <% if (locals.errors && locals.errors.isbn) { %>
+          <div class="input__error"><%= locals.errors.isbn %></div>
+          <% } %>
         </div>
 
         <button id="btn-book-fetch" class="btn btn--primary" type="button">
@@ -77,11 +81,15 @@
           value="<%= locals?.book?.title || '' %>"
           required
         />
+
+        <% if (locals.errors && locals.errors.title) { %>
+        <div class="input__error"><%= locals.errors.title %></div>
+        <% } %>
       </div>
 
       <div class="book-form__input-group">
         <%- include('partials/select', { field: 'author_id', title: 'Author',
-        elements: locals.authors, book: locals.book }) %>
+        elements: locals.authors, book: locals.book, errors: locals.errors }) %>
 
         <div>
           Can't find author?
@@ -91,7 +99,7 @@
 
       <div class="book-form__input-group">
         <%- include('partials/select', { field: 'genre_id', title: 'Genre',
-        elements: locals.genres, book: locals.book }) %>
+        elements: locals.genres, book: locals.book, errors: locals.errors }) %>
 
         <div>
           Can't find genre?
@@ -113,6 +121,10 @@
           value="<%= locals?.book?.cover || '' %>"
           required
         />
+
+        <% if (locals.errors && locals.errors.cover) { %>
+        <div class="input__error"><%= locals.errors.cover %></div>
+        <% } %>
       </div>
 
       <div class="input__wrapper">
@@ -127,8 +139,14 @@
           id="publication_year"
           name="publication_year"
           value="<%= locals?.book?.publication_year || '' %>"
+          min="1"
+          max="<%= new Date().getFullYear() %>"
           required
         />
+
+        <% if (locals.errors && locals.errors.publication_year) { %>
+        <div class="input__error"><%= locals.errors.publication_year %></div>
+        <% } %>
       </div>
 
       <div class="input__wrapper">
@@ -143,8 +161,14 @@
           id="pages"
           name="pages"
           value="<%= locals?.book?.pages || '' %>"
+          min="1"
+          max="20000"
           required
         />
+
+        <% if (locals.errors && locals.errors.pages) { %>
+        <div class="input__error"><%= locals.errors.pages %></div>
+        <% } %>
       </div>
 
       <div class="input__wrapper">
@@ -158,6 +182,10 @@
         >
           <%= locals?.book?.description || '' %>
         </textarea>
+
+        <% if (locals.errors && locals.errors.description) { %>
+        <div class="input__error"><%= locals.errors.description %></div>
+        <% } %>
       </div>
 
       <div class="input__wrapper">
@@ -173,6 +201,10 @@
           name="secret_password"
           required
         />
+
+        <% if (locals.errors && locals.errors.secret_password) { %>
+        <div class="input__error"><%= locals.errors.secret_password %></div>
+        <% } %>
       </div>
     </div>
 
