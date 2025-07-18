@@ -2,7 +2,7 @@ import express from "express";
 import path from "path";
 import { config } from "dotenv";
 import { initDatabase } from "./db/queries";
-import homeRouter from "./routes/homeRouter";
+import homeRouter from "./routes/home-router";
 import resultsRouter from "./routes/results-router";
 import authorRouter from "./routes/author-router";
 import bookRouter from "./routes/book-router";
