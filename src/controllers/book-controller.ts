@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { renderView } from "../utils/viewRenderer";
 import { BookFormRenderOptions } from "../types/render-options";
 import {
+  checkBookByISBN,
   getAuthorByName,
   getAuthors,
   getBookById,
@@ -15,6 +16,7 @@ import {
   CreateBookSchema,
 } from "../types/book";
 import { checkPassword } from "../utils/password-utils";
+import { ISBNSchema } from "../types/isbn";
 
 async function renderBookForm(
   res: Response,
@@ -42,9 +44,24 @@ async function renderBookForm(
 }
 
 export async function fetchBookData(req: Request, res: Response) {
-  const isbn = req.params.isbn;
+  const result = ISBNSchema.safeParse(req.params.isbn);
+
+  if (!result.success) {
+    console.error(result.error.issues[0].message);
+    return res.status(400).json({ error: result.error.issues[0].message });
+  }
+
+  const isbn = result.data;
 
   try {
+    const bookExists = await checkBookByISBN(isbn);
+    if (bookExists) {
+      res.status(409).json({
+        error: "Book with this ISBN already exists",
+      });
+      return;
+    }
+
     const response = await fetch(
       `https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&format=json&jscmd=data`,
     );

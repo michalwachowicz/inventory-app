@@ -57,9 +57,10 @@
             required
           />
 
-          <% if (locals.errors && locals.errors.isbn) { %>
-          <div class="input__error"><%= locals.errors.isbn %></div>
-          <% } %>
+          <div id="error-isbn" class="input__error">
+            <% if (locals.errors && locals.errors.isbn) { %> <%=
+            locals.errors.isbn %> <% } %>
+          </div>
         </div>
 
         <button id="btn-book-fetch" class="btn btn--primary" type="button">

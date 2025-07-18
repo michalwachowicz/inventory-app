@@ -213,3 +213,11 @@ export async function insertBook(book: CreateBook) {
     ],
   );
 }
+
+export async function checkBookByISBN(isbn: string) {
+  const { rows } = await pool.query("SELECT * FROM books WHERE isbn = $1", [
+    isbn,
+  ]);
+
+  return rows.length > 0;
+}

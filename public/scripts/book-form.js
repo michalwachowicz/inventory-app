@@ -11,12 +11,13 @@ function setupTextarea() {
 
 function setupBookFetcher() {
   const fetchButton = document.querySelector("#btn-book-fetch");
+  const isbnErrorElement = document.querySelector("#error-isbn");
 
-  fetchButton.addEventListener("click", async (e) => {
+  fetchButton.addEventListener("click", async () => {
     const isbn = document.querySelector("#isbn").value.trim();
 
     if (!isbn) {
-      alert("Please enter an ISBN.");
+      isbnErrorElement.textContent = "Please enter the ISBN before fetching";
       return;
     }
 
@@ -25,9 +26,9 @@ function setupBookFetcher() {
 
     try {
       const res = await fetch(`/api/book/${isbn}`);
-      if (!res.ok) throw new Error("Failed to fetch book data.");
-
       const data = await res.json();
+
+      if (!res.ok) throw new Error(data.error || "Unknown server error");
 
       document.querySelector("#title").value = data.title || "";
       document.querySelector("#author_id").value =
@@ -38,7 +39,7 @@ function setupBookFetcher() {
         data.pages !== -1 ? data.pages : "";
       document.querySelector("#cover").value = data.cover || "";
     } catch (err) {
-      alert("Failed to fetch book data.");
+      isbnErrorElement.textContent = err.message;
       console.error(err);
     } finally {
       fetchButton.disabled = false;
