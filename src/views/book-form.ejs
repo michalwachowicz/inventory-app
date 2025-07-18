@@ -11,62 +11,8 @@
   >
     <div class="book-form__container">
       <div class="book-form__input-group">
-        <div class="input__wrapper">
-          <div class="input__label-wrapper">
-            <label class="input__label" for="isbn">
-              ISBN
-              <span class="input__asterisk" aria-hidden="true">*</span>
-            </label>
-
-            <div class="tooltip" id="tooltip">
-              <button
-                type="button"
-                id="tooltip-btn"
-                class="tooltip__btn"
-                aria-describedby="tooltip-desc"
-                aria-label="Fetch book data by ISBN"
-              >
-                <img src="/assets/icons/help.svg" alt="" />
-              </button>
-
-              <div role="tooltip" id="tooltip-desc" class="tooltip__content">
-                Enter the ISBN number of the book to fetch its data
-                automatically.
-
-                <div class="tooltip__link-wrapper">
-                  <a
-                    class="tooltip__link"
-                    href="https://isbnsearch.org/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Search the book's ISBN
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <input
-            class="input__field"
-            type="text"
-            id="isbn"
-            name="isbn"
-            value="<%= locals?.book?.isbn || '' %>"
-            aria-required="true"
-            required
-          />
-
-          <div id="error-isbn" class="input__error">
-            <% if (locals.errors && locals.errors.isbn) { %> <%=
-            locals.errors.isbn %> <% } %>
-          </div>
-        </div>
-
-        <button id="btn-book-fetch" class="btn btn--primary" type="button">
-          Fetch
-        </button>
-      </div>
+        <%- include("partials/isbn-field", { book: locals.book, errors:
+        locals.errors, isEdit }) %>
 
       <div class="input__wrapper">
         <label class="input__label" for="title">

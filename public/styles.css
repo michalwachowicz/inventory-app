@@ -545,6 +545,10 @@ button {
   margin-top: 0.25rem;
 }
 
+.input__field:disabled {
+  opacity: 0.5;
+}
+
 .input__field::-webkit-outer-spin-button,
 .input__field::-webkit-inner-spin-button {
   -webkit-appearance: none;
