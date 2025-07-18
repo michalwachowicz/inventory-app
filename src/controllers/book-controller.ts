@@ -6,8 +6,40 @@ import {
   getAuthors,
   getBookById,
   getGenres,
+  insertBook,
 } from "../db/queries";
-import { BookResponse } from "../types/book";
+import {
+  Book,
+  BookResponse,
+  CreateBook,
+  CreateBookSchema,
+} from "../types/book";
+import { checkPassword } from "../utils/password-utils";
+
+async function renderBookForm(
+  res: Response,
+  options: {
+    action: "add" | "edit";
+    book?: Book;
+    errors?: Record<string, string>;
+  },
+) {
+  const authors = await getAuthors();
+  const genres = await getGenres();
+
+  const { action, book, errors } = options;
+
+  renderView<BookFormRenderOptions>(res, {
+    viewName: "book-form",
+    title: `${action[0].toUpperCase()}${action.slice(1)} Book`,
+    navbar: "basic",
+    action,
+    authors,
+    genres,
+    book,
+    errors,
+  });
+}
 
 export async function fetchBookData(req: Request, res: Response) {
   const isbn = req.params.isbn;
@@ -54,30 +86,46 @@ export async function getBookEditForm(req: Request, res: Response) {
     return;
   }
 
-  const authors = await getAuthors();
-  const genres = await getGenres();
-
-  renderView<BookFormRenderOptions>(res, {
-    viewName: "book-form",
-    title: "Edit Book",
-    navbar: "basic",
-    action: "edit",
-    authors,
-    genres,
-    book,
-  });
+  await renderBookForm(res, { action: "edit", book });
 }
 
 export async function getBookAddForm(_: Request, res: Response) {
-  const authors = await getAuthors();
-  const genres = await getGenres();
+  await renderBookForm(res, { action: "add" });
+}
 
-  renderView<BookFormRenderOptions>(res, {
-    viewName: "book-form",
-    title: "Add Book",
-    navbar: "basic",
-    action: "add",
-    authors,
-    genres,
-  });
+export async function postBookAdd(req: Request, res: Response) {
+  const errors: Record<string, string> = {};
+  const result = CreateBookSchema.safeParse(req.body);
+
+  let book: CreateBook | null = null;
+
+  if (!result.success) {
+    for (const err of result.error.issues) {
+      if (err.path.length > 0) {
+        errors[err.path[0].toString()] = err.message;
+      }
+    }
+  } else {
+    book = result.data;
+  }
+
+  try {
+    const isAuthorized = await checkPassword(req.body.secret_password);
+    if (!isAuthorized) errors.secret_password = "Invalid password";
+
+    if (Object.keys(errors).length > 0) {
+      await renderBookForm(res, { action: "add", book: req.body, errors });
+      return;
+    }
+
+    await insertBook(book!);
+    res.redirect("/book/success");
+  } catch (err) {
+    console.log("Unexpected error:", err);
+
+    res.status(500).json({
+      error: "Server error",
+      details: err instanceof Error ? err.message : "Unknown error",
+    });
+  }
 }

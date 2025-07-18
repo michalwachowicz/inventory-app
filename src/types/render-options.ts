@@ -14,6 +14,7 @@ export interface BookFormRenderOptions extends RenderOptions {
   action: "add" | "edit";
   authors: Author[];
   genres: Genre[];
+  errors?: Record<string, string>;
 }
 
 export interface HomeRenderOptions extends RenderOptions {

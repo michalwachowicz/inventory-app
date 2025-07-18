@@ -1,8 +1,7 @@
-import { Book } from "../types/book";
+import { Book, CreateBook } from "../types/book";
 import { Genre } from "../types/genre";
 import { Author } from "../types/author";
 import pool from "./pool";
-import { get } from "http";
 
 async function createAuthorsTable() {
   await pool.query(`CREATE TABLE IF NOT EXISTS authors (
@@ -24,7 +23,7 @@ async function createBooksTable() {
     isbn VARCHAR(20) NOT NULL,
     title VARCHAR(255) NOT NULL,
     cover VARCHAR(255) NOT NULL,
-    description TEXT NOT NULL,
+    description TEXT,
     publication_year INTEGER NOT NULL,
     pages INTEGER NOT NULL,
     author_id INTEGER NOT NULL REFERENCES authors(id),
@@ -193,4 +192,24 @@ export async function getSecretPassword(): Promise<string> {
     `SELECT password FROM secret_password WHERE id = 1`,
   );
   return rows.length ? rows[0].password : "";
+}
+
+export async function insertBook(book: CreateBook) {
+  await pool.query(
+    `INSERT INTO books (
+      isbn, title, cover, description, publication_year, pages, author_id, genre_id
+    ) VALUES (
+      $1, $2, $3, $4, $5, $6, $7, $8
+    )`,
+    [
+      book.isbn,
+      book.title,
+      book.cover,
+      book.description || null,
+      book.publication_year,
+      book.pages,
+      book.author_id,
+      book.genre_id,
+    ],
+  );
 }
