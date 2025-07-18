@@ -1,13 +1,9 @@
 import z from "zod";
+import { ISBNSchema } from "./isbn";
 
 export const BookSchema = z.object({
   id: z.number(),
-  isbn: z
-    .string()
-    .regex(
-      /^(?:\d{9}[\dXx]|\d{13})$/,
-      "ISBN must be a valid ISBN-10 or ISBN-13 format",
-    ),
+  isbn: ISBNSchema,
   title: z.string().min(1),
   description: z.string().optional(),
   cover: z.url(),
