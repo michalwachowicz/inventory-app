@@ -8,6 +8,7 @@ import {
   getBookById,
   getGenres,
   insertBook,
+  updateBook,
 } from "../db/queries";
 import {
   Book,
@@ -139,6 +140,54 @@ export async function postBookAdd(req: Request, res: Response) {
     }
 
     await insertBook(book!);
+    res.redirect("/book/success");
+  } catch (err) {
+    console.log("Unexpected error:", err);
+
+    res.status(500).json({
+      error: "Server error",
+      details: err instanceof Error ? err.message : "Unknown error",
+    });
+  }
+}
+
+export async function postBookEdit(req: Request, res: Response) {
+  const bookId = Number(req.params.bookId);
+
+  if (isNaN(bookId)) {
+    res.status(400).send("Invalid book ID");
+    return;
+  }
+
+  const errors: Record<string, string> = {};
+  const result = BookFormSchema.safeParse(req.body);
+
+  let book: BookFormData | null = null;
+
+  if (!result.success) {
+    for (const err of result.error.issues) {
+      if (err.path.length > 0) {
+        errors[err.path[0].toString()] = err.message;
+      }
+    }
+  } else {
+    book = result.data;
+  }
+
+  try {
+    const isAuthorized = await checkPassword(req.body.secret_password);
+    if (!isAuthorized) errors.secret_password = "Invalid password";
+
+    if (Object.keys(errors).length > 0) {
+      await renderBookForm(res, {
+        action: "edit",
+        book: { id: book, ...req.body },
+        errors,
+      });
+      return;
+    }
+
+    await updateBook(bookId, book!);
     res.redirect("/book/success");
   } catch (err) {
     console.log("Unexpected error:", err);

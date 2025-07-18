@@ -214,6 +214,31 @@ export async function insertBook(book: BookFormData) {
   );
 }
 
+export async function updateBook(id: number, bookData: BookFormData) {
+  await pool.query(
+    `UPDATE books SET
+      title = $1,
+      cover = $2,
+      description = $3,
+      publication_year = $4,
+      pages = $5,
+      author_id = $6,
+      genre_id = $7 
+    WHERE id = $8
+    `,
+    [
+      bookData.title,
+      bookData.cover,
+      bookData.description || null,
+      bookData.publication_year,
+      bookData.pages,
+      bookData.author_id,
+      bookData.genre_id,
+      id,
+    ],
+  );
+}
+
 export async function checkBookByISBN(isbn: string) {
   const { rows } = await pool.query("SELECT * FROM books WHERE isbn = $1", [
     isbn,
