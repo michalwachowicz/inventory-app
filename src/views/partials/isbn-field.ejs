@@ -42,7 +42,7 @@
       value="<%= book?.isbn || '' %>"
       aria-required="true"
       required
-      <%= isEdit ? 'disabled' : '' %>
+      <%= isEdit ? 'readonly' : '' %>
     />
 
     <div id="error-isbn" class="input__error">

@@ -545,7 +545,7 @@ button {
   margin-top: 0.25rem;
 }
 
-.input__field:disabled {
+.input__field:readonly {
   opacity: 0.5;
 }
 
