@@ -1,16 +1,32 @@
-export interface Book {
-  id: number;
-  isbn: string;
-  title: string;
-  description?: string;
-  cover: string;
-  publication_year: number;
-  pages: number;
-  author_id: number;
-  genre_id: number;
-  author?: string;
-  genre?: string;
-}
+import z from "zod";
+
+export const BookSchema = z.object({
+  id: z.number(),
+  isbn: z
+    .string()
+    .regex(
+      /^(?:\d{9}[\dXx]|\d{13})$/,
+      "ISBN must be a valid ISBN-10 or ISBN-13 format",
+    ),
+  title: z.string().min(1),
+  description: z.string().optional(),
+  cover: z.url(),
+  publication_year: z.coerce.number().min(1).max(new Date().getFullYear()),
+  pages: z.coerce.number().min(1).max(20000),
+  author_id: z.coerce.number().min(1),
+  genre_id: z.coerce.number().min(1),
+  author: z.string().optional(),
+  genre: z.string().optional(),
+});
+
+export const CreateBookSchema = BookSchema.omit({
+  id: true,
+  author: true,
+  genre: true,
+});
+
+export type Book = z.infer<typeof BookSchema>;
+export type CreateBook = z.infer<typeof CreateBookSchema>;
 
 export type BookResponse = Omit<
   Book,
