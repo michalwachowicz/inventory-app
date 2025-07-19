@@ -24,7 +24,7 @@
     <main><%- include(viewName) %></main>
     <% }; %>
 
-    <%- include("partials/search-bar") %>
+    <%- include("partials/search-bar", { selectedGenre: locals.selectedGenre || undefined }) %>
 
     <script src="/scripts/popups.js"></script>
 

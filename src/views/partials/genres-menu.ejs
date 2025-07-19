@@ -13,7 +13,10 @@
       <ul class="genres__list">
         <% locals.genres.forEach((genre) => { %>
         <li class="genres__list-item">
-          <a class="genres__link" href="/genre/<%= genre.id %>">
+          <a
+            class="genres__link"
+            href="/results?<%= baseQueryString ? baseQueryString + '&' : '' %>genreId=<%= genre.id %>"
+          >
             <%= genre.name %>
           </a>
         </li>

@@ -6,7 +6,7 @@ export interface RenderOptions {
   viewName: string;
   title?: string;
   navbar?: "basic" | "full";
-  selectedGenreId?: string;
+  selectedGenre?: Genre;
 }
 
 export interface BookFormRenderOptions extends RenderOptions {

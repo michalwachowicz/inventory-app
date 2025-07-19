@@ -32,7 +32,7 @@
     </div>
 
     <% if (locals.navbar === "full") { %>
-    <%- include("genre-chip") %>
+    <%- include("genre-chip", { baseQueryString: locals.baseQueryString || "" }) %>
     <% } %>
   </div>
 </header>

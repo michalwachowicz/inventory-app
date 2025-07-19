@@ -9,6 +9,10 @@
     action="/results"
     method="get"
   >
+    <% if (selectedGenre) { %>
+    <input type="hidden" name="genreId" value="<%= selectedGenre.id %>" />
+    <% } %>
+
     <input
       class="input__input input__input--search"
       type="text"
