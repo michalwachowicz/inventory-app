@@ -246,3 +246,11 @@ export async function checkBookByISBN(isbn: string) {
 
   return rows.length > 0;
 }
+
+export async function insertAuthor(name: string) {
+  await pool.query(`INSERT INTO authors (name) VALUES ($1)`, [name]);
+}
+
+export async function insertGenre(name: string) {
+  await pool.query(`INSERT INTO genres (name) VALUES ($1)`, [name]);
+}
