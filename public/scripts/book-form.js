@@ -7,6 +7,8 @@ function setupTextarea() {
   });
 
   textarea.value = textarea.value.trim();
+  textarea.style.height = "auto";
+  textarea.style.height = textarea.scrollHeight + "px";
 }
 
 function setupBookFetcher() {
