@@ -1,12 +1,16 @@
 import { Request, Response } from "express";
 import { renderView } from "../utils/viewRenderer";
-import { BookFormRenderOptions } from "../types/render-options";
+import {
+  BookFormRenderOptions,
+  BookRenderOptions,
+} from "../types/render-options";
 import {
   checkBookByISBN,
   getAuthorByName,
   getAuthors,
   getBookById,
   getGenres,
+  getMoreBooksByAuthor,
   insertBook,
   updateBook,
 } from "../db/queries";
@@ -205,4 +209,26 @@ export async function postBookEdit(req: Request, res: Response) {
       details: err instanceof Error ? err.message : "Unknown error",
     });
   }
+}
+
+export async function getBook(req: Request, res: Response) {
+  const bookId = Number(req.params.bookId);
+
+  if (isNaN(bookId)) {
+    res.status(400).send("Invalid book ID");
+    return;
+  }
+
+  const book = await getBookById(bookId);
+
+  let moreByAuthor: Book[] | undefined;
+  if (book) moreByAuthor = await getMoreBooksByAuthor(book.author_id, bookId);
+
+  await renderView<BookRenderOptions>(res, {
+    viewName: "book",
+    title: book?.title || "Book not found",
+    navbar: "basic",
+    book: book || undefined,
+    moreByAuthor,
+  });
 }

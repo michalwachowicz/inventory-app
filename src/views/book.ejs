@@ -1,0 +1,85 @@
+<% if (locals.book) { %>
+
+<div class="book container">
+  <div class="book__header">
+    <img
+      class="book__cover"
+      src="<%= book.cover %>"
+      alt="<%= book.title %>'s cover"
+    />
+    <h1 class="book__title"><%= book.title %></h1>
+    <a class="book__author" href="/author/<%= book.author_id %>">
+      <%= book.author %>
+    </a>
+  </div>
+
+  <div class="book__details">
+    <div class="book__column">
+      <div class="book__title--detail">Year</div>
+      <div class="book__description--detail"><%= book.publication_year %></div>
+    </div>
+
+    <div class="book__separator"></div>
+
+    <div class="book__column">
+      <div class="book__title--detail">Genre</div>
+      <div class="book__description--detail">
+        <a href="/results?genreId=<%= book.genre_id %>"><%= book.genre %></a>
+      </div>
+    </div>
+
+    <div class="book__separator"></div>
+
+    <div class="book__column">
+      <div class="book__title--detail">Pages</div>
+      <div class="book__description--detail"><%= book.pages %></div>
+    </div>
+  </div>
+
+  <% if (book.description) { %>
+  <p class="book__description"><%= book.description %></p>
+  <% } %>
+
+  <div class="book__btns">
+    <a href="/book/edit/<%= book.id %>" class="btn btn--primary">Edit</a>
+    <button type="button" class="btn btn--delete">Delete</button>
+  </div>
+
+  <% if (locals.moreByAuthor && locals.moreByAuthor.length > 0) { %>
+  <div class="book__more">
+    <h2 class="book__title--more">More by Author</h2>
+
+    <ul class="book__grid">
+      <% for (let i = 0; i < Math.min(moreByAuthor.length, 4); i++) { %>
+      <li>
+        <a href="/book/<%= moreByAuthor[i].id %>">
+          <img
+            class="book__grid-image"
+            src="<%= moreByAuthor[i].cover %>"
+            alt="<%= moreByAuthor[i].title %>"
+          />
+        </a>
+      </li>
+      <% } %>
+    </ul>
+
+    <% if (moreByAuthor.length > 4) { %>
+    <a class="book__more-link" href="/author/<%= book.author_id %>">
+      More by Author
+    </a>
+    <% } %>
+  </div>
+  <% } %>
+</div>
+
+<% } else { %>
+
+<div class="book__not-found">
+  <!-- prettier-ignore-start -->
+  <%- include("partials/empty-state", {
+    text: "Sorry... We could not find a book with specified ID"
+  }) %>
+  <!-- prettier-ignore-end -->
+</div>
+
+<% } %>

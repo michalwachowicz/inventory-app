@@ -9,6 +9,11 @@ export interface RenderOptions {
   selectedGenre?: Genre;
 }
 
+export interface BookRenderOptions extends RenderOptions {
+  book?: Book;
+  moreByAuthor?: Book[];
+}
+
 export interface BookFormRenderOptions extends RenderOptions {
   book?: Book;
   action: "add" | "edit";

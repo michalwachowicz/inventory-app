@@ -277,3 +277,21 @@ export async function getGenreNameById(id: number): Promise<string | null> {
 
   return rows.length > 0 ? rows[0].name : null;
 }
+
+export async function getMoreBooksByAuthor(
+  authorId: number,
+  bookId: number,
+): Promise<Book[]> {
+  const { rows } = await pool.query(
+    `SELECT books.*, authors.name AS author, genres.name AS genre 
+     FROM books 
+     INNER JOIN authors ON books.author_id = authors.id 
+     INNER JOIN genres ON books.genre_id = genres.id 
+     WHERE books.author_id = $1 AND books.id != $2
+     ORDER BY id DESC 
+     LIMIT 5`,
+    [authorId, bookId],
+  );
+
+  return rows;
+}

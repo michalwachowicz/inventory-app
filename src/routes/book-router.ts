@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  getBook,
   getBookAddForm,
   getBookEditForm,
   postBookAdd,
@@ -7,6 +8,8 @@ import {
 } from "../controllers/book-controller";
 
 const bookRouter = Router();
+
+bookRouter.get("/:bookId", getBook);
 
 bookRouter.get("/add", getBookAddForm);
 bookRouter.post("/add", postBookAdd);
