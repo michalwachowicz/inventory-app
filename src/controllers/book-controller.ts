@@ -49,7 +49,8 @@ export async function fetchBookData(req: Request, res: Response) {
 
   if (!result.success) {
     console.error(result.error.issues[0].message);
-    return res.status(400).json({ error: result.error.issues[0].message });
+    res.status(400).json({ error: result.error.issues[0].message });
+    return;
   }
 
   const isbn = result.data;
@@ -73,12 +74,19 @@ export async function fetchBookData(req: Request, res: Response) {
       extractedData?.authors?.[0]?.name || "undefined",
     );
 
+    const extractedYear: string = extractedData?.publish_date || "";
+    const publication_year = Number(
+      extractedYear.includes(",")
+        ? extractedYear.split(", ")[1]
+        : extractedYear.slice(0, 4),
+    );
+
     const bookData: BookResponse = {
       title: extractedData?.title || "",
       author_id: author?.id || -1,
       cover: extractedData?.cover?.medium || "",
-      publication_year: extractedData?.publish_date.split(", ")[1] || -1,
       pages: extractedData?.number_of_pages || -1,
+      publication_year,
     };
 
     res.json(bookData);
