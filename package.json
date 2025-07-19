@@ -4,7 +4,8 @@
   "scripts": {
     "start": "ts-node src/index.ts",
     "dev": "ts-node-dev src/index.ts",
-    "db:generate": "ts-node src/db/generate-data.ts"
+    "db:generate": "ts-node src/db/generate-data.ts",
+    "db:password": "ts-node src/db/set-password.ts"
   },
   "repository": {
     "type": "git",

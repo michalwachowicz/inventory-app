@@ -194,6 +194,21 @@ export async function getSecretPassword(): Promise<string> {
   return rows.length ? rows[0].password : "";
 }
 
+export async function updateSecretPassword(password: string) {
+  const currentPassword = await getSecretPassword();
+
+  if (currentPassword) {
+    await pool.query("UPDATE secret_password SET password = $1 WHERE id = 1", [
+      password,
+    ]);
+  } else {
+    await pool.query(
+      "INSERT INTO secret_password (id, password) VALUES (1, $1)",
+      [password],
+    );
+  }
+}
+
 export async function insertBook(book: BookFormData) {
   await pool.query(
     `INSERT INTO books (
