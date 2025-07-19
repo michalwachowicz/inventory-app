@@ -3,7 +3,7 @@ locals.recentlyAddedBooks.length > 0; %>
 
 <div class="container home">
   <div class="home__hero">
-    <div>
+    <div class="home__hero-content">
       <h1 class="home__title">
         <!-- prettier-ignore-start -->
         <%= isFilled 
@@ -22,7 +22,10 @@ locals.recentlyAddedBooks.length > 0; %>
         <!-- prettier-ignore-end -->
       </p>
 
-      <%- include("partials/add-button", { classes: "home__btn", title: "Add a book" }) %>
+      <a href="/book/add" class="btn btn--icon btn--primary home__btn">
+        <img src="/assets/icons/add.svg" alt="" width="24" height="24" />
+        Add a book
+      </a>
     </div>
 
     <img
