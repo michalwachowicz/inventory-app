@@ -9,12 +9,12 @@ import {
 
 const bookRouter = Router();
 
-bookRouter.get("/:bookId", getBook);
-
 bookRouter.get("/add", getBookAddForm);
 bookRouter.post("/add", postBookAdd);
 
 bookRouter.get("/edit/:bookId", getBookEditForm);
 bookRouter.post("/edit/:bookId", postBookEdit);
+
+bookRouter.get("/:bookId", getBook);
 
 export default bookRouter;
