@@ -8,5 +8,5 @@ export async function renderView<T extends RenderOptions = RenderOptions>(
   options: T,
 ) {
   const genres: Genre[] = options.navbar === "full" ? await getGenres() : [];
-  res.render("index", { ...options, genres });
+  res.render("index", { genres, ...options });
 }
