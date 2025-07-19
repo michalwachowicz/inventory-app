@@ -25,6 +25,10 @@ app.use("/author", authorRouter);
 app.use("/book", bookRouter);
 app.use("/api", apiRouter);
 
+app.get("/{*splat}", (_, res) => {
+  res.render("not-found");
+});
+
 initDatabase()
   .then(() => {
     console.log("Connected to the database successfully!");
