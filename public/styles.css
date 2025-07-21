@@ -61,8 +61,13 @@ a {
   background-color: var(--color-red);
 }
 
+.btn--cancel {
+  background-color: #333333;
+}
+
 .btn--primary,
-.btn--delete {
+.btn--delete,
+.btn--cancel {
   font-weight: 700;
   font-size: 1.125rem;
   border-radius: 0.25rem;
@@ -186,6 +191,7 @@ a {
   left: 0;
   width: 100vw;
   height: 100vh;
+  z-index: 1;
 }
 
 .dialog__backdrop {
@@ -202,8 +208,38 @@ a {
   position: relative;
   border-radius: 0.5rem;
   background-color: var(--color-popup);
+  padding: 1rem;
+  width: 100%;
+  margin: 1.5rem;
+  max-width: 540px;
   z-index: 1;
   animation: slide-in 0.15s ease-in forwards;
+}
+
+.dialog__title {
+  margin-bottom: 1.25rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.dialog__description {
+  font-size: 1.125rem;
+  margin-bottom: 1rem;
+}
+
+.dialog__btns {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+@media screen and (min-width: 500px) {
+  .dialog__btns {
+    align-items: center;
+    justify-content: end;
+    flex-direction: row-reverse;
+  }
 }
 
 .input__input {
@@ -231,9 +267,6 @@ a {
 .searchbar__form {
   position: relative;
   padding: 0.75rem;
-  width: 100%;
-  margin: 1.5rem;
-  max-width: 540px;
 }
 
 .searchbar__btn {
