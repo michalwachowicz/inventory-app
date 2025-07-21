@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { renderView } from "../utils/viewRenderer";
+import { renderSuccessView, renderView } from "../utils/viewRenderer";
 import {
   BookFormRenderOptions,
   BookRenderOptions,
@@ -229,5 +229,19 @@ export async function getBook(req: Request, res: Response) {
     navbar: "basic",
     book: book || undefined,
     moreByAuthor,
+  });
+}
+
+export async function getBookAddSuccessView(_: Request, res: Response) {
+  await renderSuccessView(res, {
+    title: "Book Added",
+    text: "A book was added successfully!",
+  });
+}
+
+export async function getBookEditSuccessView(_: Request, res: Response) {
+  await renderSuccessView(res, {
+    title: "Book Edited",
+    text: "A book was edited successfully!",
   });
 }
