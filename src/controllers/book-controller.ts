@@ -123,10 +123,21 @@ export async function getBookAddForm(_: Request, res: Response) {
   await renderBookForm(res, { action: "add" });
 }
 
-export async function postBookAdd(req: Request, res: Response) {
+async function handleBookFormPost({
+  req,
+  res,
+  action,
+  onValid,
+  checkDuplicate,
+}: {
+  req: Request;
+  res: Response;
+  action: "add" | "edit";
+  onValid: (book: BookFormData) => Promise<void>;
+  checkDuplicate: boolean;
+}) {
   const errors: Record<string, string> = {};
   const result = BookFormSchema.safeParse(req.body);
-
   let book: BookFormData | null = null;
 
   if (!result.success) {
@@ -140,27 +151,46 @@ export async function postBookAdd(req: Request, res: Response) {
   }
 
   try {
-    const bookExists = await checkBookByISBN(req.body.isbn);
-    if (bookExists) errors.isbn = "Book with this ISBN already exists";
+    if (checkDuplicate && req.body.isbn) {
+      const bookExists = await checkBookByISBN(req.body.isbn);
+      if (bookExists) errors.isbn = "Book with this ISBN already exists";
+    }
 
     const isAuthorized = await checkPassword(req.body.secret_password);
-    if (!isAuthorized) errors.secret_password = "Invalid password";
+    if (!isAuthorized) {
+      errors.secret_password = "Invalid password";
+    }
 
-    if (Object.keys(errors).length > 0) {
-      await renderBookForm(res, { action: "add", book: req.body, errors });
+    if (Object.keys(errors).length > 0 || !book) {
+      await renderBookForm(res, {
+        action,
+        book: req.params.bookId
+          ? { id: req.params.bookId, ...req.body }
+          : undefined,
+        errors,
+      });
       return;
     }
 
-    await insertBook(book!);
-    res.redirect("/book/success");
+    await onValid(book);
+    res.redirect(`/book/${action}/success`);
   } catch (err) {
-    console.log("Unexpected error:", err);
-
+    console.error("Unexpected error:", err);
     res.status(500).json({
       error: "Server error",
       details: err instanceof Error ? err.message : "Unknown error",
     });
   }
+}
+
+export async function postBookAdd(req: Request, res: Response) {
+  await handleBookFormPost({
+    req,
+    res,
+    action: "add",
+    onValid: insertBook,
+    checkDuplicate: true,
+  });
 }
 
 export async function postBookEdit(req: Request, res: Response) {
@@ -171,44 +201,13 @@ export async function postBookEdit(req: Request, res: Response) {
     return;
   }
 
-  const errors: Record<string, string> = {};
-  const result = BookFormSchema.safeParse(req.body);
-
-  let book: BookFormData | null = null;
-
-  if (!result.success) {
-    for (const err of result.error.issues) {
-      if (err.path.length > 0) {
-        errors[err.path[0].toString()] = err.message;
-      }
-    }
-  } else {
-    book = result.data;
-  }
-
-  try {
-    const isAuthorized = await checkPassword(req.body.secret_password);
-    if (!isAuthorized) errors.secret_password = "Invalid password";
-
-    if (Object.keys(errors).length > 0) {
-      await renderBookForm(res, {
-        action: "edit",
-        book: { id: book, ...req.body },
-        errors,
-      });
-      return;
-    }
-
-    await updateBook(bookId, book!);
-    res.redirect("/book/success");
-  } catch (err) {
-    console.log("Unexpected error:", err);
-
-    res.status(500).json({
-      error: "Server error",
-      details: err instanceof Error ? err.message : "Unknown error",
-    });
-  }
+  await handleBookFormPost({
+    req,
+    res,
+    action: "edit",
+    onValid: (book) => updateBook(bookId, book),
+    checkDuplicate: false,
+  });
 }
 
 export async function getBook(req: Request, res: Response) {
