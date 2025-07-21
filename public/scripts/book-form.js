@@ -13,6 +13,8 @@ function setupTextarea() {
 
 function setupBookFetcher() {
   const fetchButton = document.querySelector("#btn-book-fetch");
+  if (!fetchButton) return;
+
   const isbnErrorElement = document.querySelector("#error-isbn");
 
   fetchButton.addEventListener("click", async () => {
