@@ -803,6 +803,35 @@ a {
   min-height: 100vh;
 }
 
+.success {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  min-height: 100vh;
+}
+
+.success__container {
+  padding: 2rem;
+  max-width: 420px;
+}
+
+.success__img-container {
+  width: 75%;
+  margin: 0 auto;
+}
+
+.success__img {
+  width: 100%;
+}
+
+.success__message {
+  margin: 3rem 0 1.5rem 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  text-align: center;
+}
+
 @keyframes fade-in {
   from {
     opacity: 0;

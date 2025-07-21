@@ -9,6 +9,11 @@ export interface RenderOptions {
   selectedGenre?: Genre;
 }
 
+export interface SuccessRenderOptions {
+  title: string;
+  text: string;
+}
+
 export interface BookRenderOptions extends RenderOptions {
   book?: Book;
   moreByAuthor?: Book[];
