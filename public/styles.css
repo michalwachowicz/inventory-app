@@ -771,6 +771,10 @@ a {
   pointer-events: auto;
 }
 
+.tooltip:not(.tooltip--show) .tooltip__content {
+  z-index: -1;
+}
+
 .tooltip__content {
   position: absolute;
   right: 0;

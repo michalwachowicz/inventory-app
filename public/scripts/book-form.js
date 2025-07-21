@@ -117,7 +117,7 @@ function setupTooltip() {
   });
 
   tooltipContent.addEventListener("focusin", () => {
-    updateTooltipVisibility();
+    showTooltip();
   });
 
   tooltipContent.addEventListener("focusout", () => {
