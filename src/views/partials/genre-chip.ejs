@@ -27,9 +27,22 @@
       <img src="/assets/icons/edit.svg" alt="" width="28" height="28" />
     </button>
 
-    <button aria-label="delete genre">
+    <button id="btn-delete-genre" aria-label="delete genre">
       <img src="/assets/icons/delete.svg" alt="" width="28" height="28" />
     </button>
   </div>
+
+  <script defer>
+    document.addEventListener("DOMContentLoaded", () => {
+      setupDeleteDialog(
+        "/genre/delete/<%= selectedGenre.id %>",
+        "/genre/delete/success",
+        "Delete Genre?",
+        "Are you sure you want to delete this genre and all books related to it? This action is irreversible",
+      );
+
+      setupPopup("#btn-delete-genre", "#delete-dialog", "#btn-delete-cancel");
+    });
+  </script>
   <% } %>
 </div>

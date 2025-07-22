@@ -7,6 +7,7 @@ import resultsRouter from "./routes/results-router";
 import authorRouter from "./routes/author-router";
 import bookRouter from "./routes/book-router";
 import apiRouter from "./routes/api-router";
+import genreRouter from "./routes/genre-router";
 
 config();
 
@@ -24,6 +25,7 @@ app.use("/", homeRouter);
 app.use("/results", resultsRouter);
 app.use("/author", authorRouter);
 app.use("/book", bookRouter);
+app.use("/genre", genreRouter);
 app.use("/api", apiRouter);
 
 app.get("/{*splat}", (_, res) => {

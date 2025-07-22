@@ -27,7 +27,7 @@ async function createBooksTable() {
     publication_year INTEGER NOT NULL,
     pages INTEGER NOT NULL,
     author_id INTEGER NOT NULL REFERENCES authors(id),
-    genre_id INTEGER NOT NULL REFERENCES genres(id)
+    genre_id INTEGER NOT NULL REFERENCES genres(id) ON DELETE CASCADE
   )`);
 }
 
@@ -300,6 +300,15 @@ export async function deleteBookById(bookId: number): Promise<boolean> {
   const result = await pool.query(
     `DELETE FROM books WHERE id = $1 RETURNING id`,
     [bookId],
+  );
+
+  return (result.rowCount ?? 0) > 0;
+}
+
+export async function deleteGenreById(genreId: number): Promise<boolean> {
+  const result = await pool.query(
+    `DELETE FROM genres WHERE id = $1 RETURNING id`,
+    [genreId],
   );
 
   return (result.rowCount ?? 0) > 0;
