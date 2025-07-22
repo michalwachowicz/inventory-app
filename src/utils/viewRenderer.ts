@@ -2,6 +2,7 @@ import { Response } from "express";
 import { Genre } from "../types/genre";
 import { getGenres } from "../db/queries";
 import { RenderOptions, SuccessRenderOptions } from "../types/render-options";
+import { capitalize } from "./capitalize";
 
 export async function renderView<T extends RenderOptions = RenderOptions>(
   res: Response,
@@ -15,5 +16,11 @@ export async function renderSuccessView(
   res: Response,
   options: SuccessRenderOptions,
 ) {
-  res.render("success", options);
+  const { entity, action } = options;
+  const viewOptions = {
+    title: `${capitalize(entity)} ${capitalize(action)}`,
+    text: `A${entity.match(/^[aieouAIEOU].*/) ? "n" : ""} ${entity} was ${action} successfully!`,
+  };
+
+  res.render("success", viewOptions);
 }

@@ -10,8 +10,8 @@ export interface RenderOptions {
 }
 
 export interface SuccessRenderOptions {
-  title: string;
-  text: string;
+  entity: string;
+  action: string;
 }
 
 export interface BookRenderOptions extends RenderOptions {
