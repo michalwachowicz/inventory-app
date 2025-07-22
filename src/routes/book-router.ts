@@ -3,6 +3,8 @@ import {
   getBook,
   getBookAddForm,
   getBookAddSuccessView,
+  postBookDelete,
+  getBookDeleteSuccessView,
   getBookEditForm,
   getBookEditSuccessView,
   postBookAdd,
@@ -18,6 +20,9 @@ bookRouter.post("/add", postBookAdd);
 bookRouter.get("/edit/success", getBookEditSuccessView);
 bookRouter.get("/edit/:bookId", getBookEditForm);
 bookRouter.post("/edit/:bookId", postBookEdit);
+
+bookRouter.get("/delete/success", getBookDeleteSuccessView);
+bookRouter.post("/delete/:bookId", postBookDelete);
 
 bookRouter.get("/:bookId", getBook);
 

@@ -6,6 +6,7 @@ import {
 } from "../types/render-options";
 import {
   checkBookByISBN,
+  deleteBookById,
   getAuthorByName,
   getAuthors,
   getBookById,
@@ -232,16 +233,45 @@ export async function getBook(req: Request, res: Response) {
   });
 }
 
+export async function postBookDelete(req: Request, res: Response) {
+  const bookId = Number(req.params.bookId);
+
+  if (isNaN(bookId)) {
+    res.status(400).send({ error: "Invalid book ID" });
+    return;
+  }
+
+  try {
+    const isAuthorized = await checkPassword(req.body.secret_password);
+    if (!isAuthorized) {
+      res.status(400).send({ error: "Invalid password" });
+      return;
+    }
+
+    const isDeleted = await deleteBookById(bookId);
+    if (!isDeleted) {
+      res.status(404).send({ error: "Book not found" });
+      return;
+    }
+
+    res.status(200).send({ message: "Book deleted successfully" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      error: "Failed to fetch book data",
+      details: err instanceof Error ? err.message : "Unknown error",
+    });
+  }
+}
+
+export async function getBookDeleteSuccessView(_: Request, res: Response) {
+  await renderSuccessView(res, { entity: "book", action: "deleted" });
+}
+
 export async function getBookAddSuccessView(_: Request, res: Response) {
-  await renderSuccessView(res, {
-    title: "Book Added",
-    text: "A book was added successfully!",
-  });
+  await renderSuccessView(res, { entity: "book", action: "added" });
 }
 
 export async function getBookEditSuccessView(_: Request, res: Response) {
-  await renderSuccessView(res, {
-    title: "Book Edited",
-    text: "A book was edited successfully!",
-  });
+  await renderSuccessView(res, { entity: "book", action: "edited" });
 }

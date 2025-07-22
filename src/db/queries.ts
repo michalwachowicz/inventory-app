@@ -295,3 +295,12 @@ export async function getMoreBooksByAuthor(
 
   return rows;
 }
+
+export async function deleteBookById(bookId: number): Promise<boolean> {
+  const result = await pool.query(
+    `DELETE FROM books WHERE id = $1 RETURNING id`,
+    [bookId],
+  );
+
+  return (result.rowCount ?? 0) > 0;
+}

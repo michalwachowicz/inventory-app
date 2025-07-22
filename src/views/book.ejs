@@ -42,7 +42,9 @@
 
   <div class="book__btns">
     <a href="/book/edit/<%= book.id %>" class="btn btn--primary">Edit</a>
-    <button type="button" class="btn btn--delete">Delete</button>
+    <button id="btn-delete-book" type="button" class="btn btn--delete">
+      Delete
+    </button>
   </div>
 
   <% if (locals.moreByAuthor && locals.moreByAuthor.length > 0) { %>
@@ -71,6 +73,19 @@
   </div>
   <% } %>
 </div>
+
+<script defer>
+  document.addEventListener("DOMContentLoaded", () => {
+    setupDeleteDialog(
+      "/book/delete/<%= book.id %>",
+      "/book/delete/success",
+      "Delete Book?",
+      "Are you sure you want to delete this book and all its data? This action is irreversible",
+    );
+
+    setupPopup("#btn-delete-book", "#delete-dialog", "#btn-delete-cancel");
+  });
+</script>
 
 <% } else { %>
 
