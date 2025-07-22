@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { checkPassword } from "../utils/password-utils";
 import { deleteGenreById, getGenreNameById } from "../db/queries";
 import { renderView } from "../utils/viewRenderer";
-import { Genre } from "../types/genre";
+import { Entity } from "../types/entity";
 import { EntityFormRenderOptions } from "../types/render-options";
 import { capitalize } from "../utils/capitalize";
 
@@ -10,7 +10,7 @@ async function renderGenreForm(
   res: Response,
   options: {
     action: "add" | "edit";
-    genre?: Genre;
+    genre?: Entity;
     errors?: Record<string, string>;
   },
 ) {

@@ -3,14 +3,14 @@ import { renderView } from "../utils/viewRenderer";
 import { QueryRenderOptions } from "../types/render-options";
 import { buildBaseQueryString } from "../utils/base-query";
 import { getBooksByGenreAndQuery, getGenreNameById } from "../db/queries";
-import { Genre } from "../types/genre";
+import { Entity } from "../types/entity";
 
 export async function getResults(req: Request, res: Response) {
   const query = (req.query.query as string) || undefined;
   const genreId = Number(req.query.genreId) || undefined;
 
   let page = Number(req.query.currentPage) || 1;
-  let selectedGenre: Genre | undefined;
+  let selectedGenre: Entity | undefined;
 
   if (genreId) {
     const genreName = await getGenreNameById(genreId);

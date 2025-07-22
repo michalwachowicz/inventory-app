@@ -1,6 +1,5 @@
 import { Book, BookFormData } from "../types/book";
-import { Genre } from "../types/genre";
-import { Author } from "../types/author";
+import { Entity } from "../types/entity";
 import pool from "./pool";
 
 async function createAuthorsTable() {
@@ -45,7 +44,7 @@ export async function initDatabase() {
   await createSecretPasswordTable();
 }
 
-export async function getGenres(): Promise<Genre[]> {
+export async function getGenres(): Promise<Entity[]> {
   const { rows } = await pool.query(`SELECT * FROM genres`);
   return rows;
 }
@@ -151,7 +150,7 @@ export async function getBooksByAuthor(
   return { books: booksSql.rows, pages };
 }
 
-export async function getAuthorById(authorId: number): Promise<Author | null> {
+export async function getAuthorById(authorId: number): Promise<Entity | null> {
   const { rows } = await pool.query(
     `SELECT id, name FROM authors WHERE id = $1`,
     [authorId],
@@ -160,7 +159,7 @@ export async function getAuthorById(authorId: number): Promise<Author | null> {
   return rows.length ? rows[0] : null;
 }
 
-export async function getAuthors(): Promise<Author[]> {
+export async function getAuthors(): Promise<Entity[]> {
   const { rows } = await pool.query(`SELECT * FROM authors`);
   return rows;
 }
@@ -178,7 +177,7 @@ export async function getBookById(bookId: number): Promise<Book | null> {
   return rows.length ? rows[0] : null;
 }
 
-export async function getAuthorByName(name: string): Promise<Author | null> {
+export async function getAuthorByName(name: string): Promise<Entity | null> {
   const { rows } = await pool.query(
     `SELECT * FROM authors WHERE name ILIKE $1`,
     [name],

@@ -12,14 +12,14 @@ import {
 } from "../types/render-options";
 import { buildBaseQueryString } from "../utils/base-query";
 import { checkPassword } from "../utils/password-utils";
-import { Author } from "../types/author";
+import { Entity } from "../types/entity";
 import { capitalize } from "../utils/capitalize";
 
 async function renderAuthorForm(
   res: Response,
   options: {
     action: "add" | "edit";
-    author?: Author;
+    author?: Entity;
     errors?: Record<string, string>;
   },
 ) {

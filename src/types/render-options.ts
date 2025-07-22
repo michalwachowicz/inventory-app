@@ -1,12 +1,11 @@
-import { Author } from "./author";
 import { Book } from "./book";
-import { Genre } from "./genre";
+import { Entity } from "./entity";
 
 export interface RenderOptions {
   viewName: string;
   title?: string;
   navbar?: "basic" | "full";
-  selectedGenre?: Genre;
+  selectedGenre?: Entity;
 }
 
 export interface SuccessRenderOptions {
@@ -21,7 +20,7 @@ export interface BookRenderOptions extends RenderOptions {
 
 export interface EntityFormRenderOptions extends RenderOptions {
   entityName: string;
-  entity?: Genre | Author;
+  entity?: Entity;
   action: "add" | "edit";
   errors?: Record<string, string>;
 }
@@ -29,8 +28,8 @@ export interface EntityFormRenderOptions extends RenderOptions {
 export interface BookFormRenderOptions extends RenderOptions {
   book?: Book;
   action: "add" | "edit";
-  authors: Author[];
-  genres: Genre[];
+  authors: Entity[];
+  genres: Entity[];
   errors?: Record<string, string>;
 }
 
