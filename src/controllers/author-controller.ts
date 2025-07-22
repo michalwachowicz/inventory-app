@@ -7,54 +7,17 @@ import {
 import { renderView } from "../utils/viewRenderer";
 import {
   AuthorRenderOptions,
-  EntityFormRenderOptions,
   ErrorRenderOptions,
 } from "../types/render-options";
 import { buildBaseQueryString } from "../utils/base-query";
-import { checkPassword } from "../utils/password-utils";
-import { Entity } from "../types/entity";
-import { capitalize } from "../utils/capitalize";
+import { getEntityDeleteMethod, getEntityPostForm } from "./entity-controller";
 
-async function renderAuthorForm(
-  res: Response,
-  options: {
-    action: "add" | "edit";
-    author?: Entity;
-    errors?: Record<string, string>;
-  },
-) {
-  const { action, author, errors } = options;
-
-  renderView<EntityFormRenderOptions>(res, {
-    viewName: "entity-form",
-    title: `${capitalize(action)} Author`,
-    navbar: "basic",
-    entityName: "author",
-    entity: author,
-    action,
-    errors,
-  });
+export function getAuthorEditForm() {
+  return getEntityPostForm("author", getAuthorById);
 }
 
-export async function getAuthorEditForm(req: Request, res: Response) {
-  const authorId = Number(req.params.authorId);
-
-  if (isNaN(authorId)) {
-    res.status(400).send("Invalid author ID");
-    return;
-  }
-
-  const author = await getAuthorById(authorId);
-  if (author === null) {
-    res.status(404).send("Author not found");
-    return;
-  }
-
-  await renderAuthorForm(res, { action: "edit", author });
-}
-
-export async function getAuthorAddForm(_: Request, res: Response) {
-  await renderAuthorForm(res, { action: "add" });
+export function postAuthorDelete() {
+  return getEntityDeleteMethod("author", deleteAuthorById);
 }
 
 export async function getAuthorBooks(req: Request, res: Response) {
@@ -101,35 +64,4 @@ export async function getAuthorBooks(req: Request, res: Response) {
     authorId,
     baseQueryString: buildBaseQueryString(req),
   });
-}
-
-export async function postAuthorDelete(req: Request, res: Response) {
-  const authorId = Number(req.params.authorId);
-
-  if (isNaN(authorId)) {
-    res.status(400).send({ error: "Invalid author ID" });
-    return;
-  }
-
-  try {
-    const isAuthorized = await checkPassword(req.body.secret_password);
-    if (!isAuthorized) {
-      res.status(400).send({ error: "Invalid password" });
-      return;
-    }
-
-    const isDeleted = await deleteAuthorById(authorId);
-    if (!isDeleted) {
-      res.status(404).send({ error: "Author not found" });
-      return;
-    }
-
-    res.status(200).send({ message: "Author deleted successfully" });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      error: "Failed to fetch author data",
-      details: err instanceof Error ? err.message : "Unknown error",
-    });
-  }
 }

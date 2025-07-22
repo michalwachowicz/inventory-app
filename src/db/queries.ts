@@ -269,12 +269,12 @@ export async function insertGenre(name: string) {
   await pool.query(`INSERT INTO genres (name) VALUES ($1)`, [name]);
 }
 
-export async function getGenreNameById(id: number): Promise<string | null> {
+export async function getGenreById(id: number): Promise<Entity | null> {
   const { rows } = await pool.query("SELECT name FROM genres WHERE id = $1", [
     id,
   ]);
 
-  return rows.length > 0 ? rows[0].name : null;
+  return rows.length > 0 ? rows[0] : null;
 }
 
 export async function getMoreBooksByAuthor(
