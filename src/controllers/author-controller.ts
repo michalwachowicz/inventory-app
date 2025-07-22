@@ -4,7 +4,7 @@ import {
   getAuthorById,
   getBooksByAuthor,
 } from "../db/queries";
-import { renderView } from "../utils/viewRenderer";
+import { renderView } from "../utils/view-renderer";
 import {
   AuthorRenderOptions,
   ErrorRenderOptions,

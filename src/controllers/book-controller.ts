@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { renderView } from "../utils/viewRenderer";
+import { renderView } from "../utils/view-renderer";
 import {
   BookFormRenderOptions,
   BookRenderOptions,

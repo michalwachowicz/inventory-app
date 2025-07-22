@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { Entity } from "../types/entity";
 import { EntityFormRenderOptions } from "../types/render-options";
 import { capitalize } from "../utils/capitalize";
-import { renderView } from "../utils/viewRenderer";
+import { renderView } from "../utils/view-renderer";
 import { checkPassword } from "../utils/password-utils";
 
 export async function renderEntityForm(

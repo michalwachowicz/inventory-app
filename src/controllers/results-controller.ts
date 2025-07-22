@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { renderView } from "../utils/viewRenderer";
+import { renderView } from "../utils/view-renderer";
 import { QueryRenderOptions } from "../types/render-options";
 import { buildBaseQueryString } from "../utils/base-query";
 import { getBooksByGenreAndQuery, getGenreById } from "../db/queries";
