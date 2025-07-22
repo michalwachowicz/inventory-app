@@ -7,10 +7,55 @@ import {
 import { renderSuccessView, renderView } from "../utils/viewRenderer";
 import {
   AuthorRenderOptions,
+  EntityFormRenderOptions,
   ErrorRenderOptions,
 } from "../types/render-options";
 import { buildBaseQueryString } from "../utils/base-query";
 import { checkPassword } from "../utils/password-utils";
+import { Author } from "../types/author";
+import { capitalize } from "../utils/capitalize";
+
+async function renderAuthorForm(
+  res: Response,
+  options: {
+    action: "add" | "edit";
+    author?: Author;
+    errors?: Record<string, string>;
+  },
+) {
+  const { action, author, errors } = options;
+
+  renderView<EntityFormRenderOptions>(res, {
+    viewName: "entity-form",
+    title: `${capitalize(action)} Author`,
+    navbar: "basic",
+    entityName: "author",
+    entity: author,
+    action,
+    errors,
+  });
+}
+
+export async function getAuthorEditForm(req: Request, res: Response) {
+  const authorId = Number(req.params.authorId);
+
+  if (isNaN(authorId)) {
+    res.status(400).send("Invalid author ID");
+    return;
+  }
+
+  const author = await getAuthorById(authorId);
+  if (author === null) {
+    res.status(404).send("Author not found");
+    return;
+  }
+
+  await renderAuthorForm(res, { action: "edit", author });
+}
+
+export async function getAuthorAddForm(_: Request, res: Response) {
+  await renderAuthorForm(res, { action: "add" });
+}
 
 export async function getAuthorBooks(req: Request, res: Response) {
   const authorId = Number(req.params.authorId);
@@ -91,4 +136,12 @@ export async function postAuthorDelete(req: Request, res: Response) {
 
 export async function getAuthorDeleteSuccessView(_: Request, res: Response) {
   await renderSuccessView(res, { entity: "author", action: "deleted" });
+}
+
+export async function getAuthorAddSuccessView(_: Request, res: Response) {
+  await renderSuccessView(res, { entity: "author", action: "added" });
+}
+
+export async function getAuthorEditSuccessView(_: Request, res: Response) {
+  await renderSuccessView(res, { entity: "author", action: "edited" });
 }

@@ -1,0 +1,60 @@
+<% const actionCapitalized = locals.action[0].toUpperCase() + locals.action.slice(1) %>
+<% const entityCapitalized = locals.entityName[0].toUpperCase() + locals.entityName.slice(1) %>
+
+<div class="container book-form">
+  <h1 class="book-form__title">
+    <%= actionCapitalized %> a<%= locals.entityName.match(/^[aieouAIEOU].*/) ?
+    "n" : ""%> <%= entityCapitalized %>
+  </h1>
+
+  <form
+    class="book-form__form"
+    action="/<%= entityName %>/<%= `${locals.action}${locals.action === 'edit' && locals.entity?.id ? `/${locals.entity.id}` : ''}` %>"
+    method="post"
+  >
+    <div class="book-form__container">
+      <div class="input__wrapper">
+        <label class="input__label" for="name">
+          Name
+          <span class="input__asterisk" aria-hidden="true">*</span>
+        </label>
+
+        <input
+          class="input__field"
+          type="text"
+          id="name"
+          name="name"
+          value="<%= locals?.entity?.name || '' %>"
+          required
+        />
+
+        <% if (locals.errors && locals.errors.name) { %>
+        <div class="input__error"><%= locals.errors.name %></div>
+        <% } %>
+      </div>
+
+      <div class="input__wrapper">
+        <label class="input__label" for="secret_password">
+          Secret Password
+          <span class="input__asterisk" aria-hidden="true">*</span>
+        </label>
+
+        <input
+          class="input__field"
+          type="password"
+          id="secret_password"
+          name="secret_password"
+          required
+        />
+
+        <% if (locals.errors && locals.errors.secret_password) { %>
+        <div class="input__error"><%= locals.errors.secret_password %></div>
+        <% } %>
+      </div>
+    </div>
+
+    <button class="btn btn--primary" type="submit">
+      <%= actionCapitalized %> <%= entityCapitalized %>
+    </button>
+  </form>
+</div>

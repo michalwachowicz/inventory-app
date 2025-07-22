@@ -19,6 +19,13 @@ export interface BookRenderOptions extends RenderOptions {
   moreByAuthor?: Book[];
 }
 
+export interface EntityFormRenderOptions extends RenderOptions {
+  entityName: string;
+  entity?: Genre | Author;
+  action: "add" | "edit";
+  errors?: Record<string, string>;
+}
+
 export interface BookFormRenderOptions extends RenderOptions {
   book?: Book;
   action: "add" | "edit";
