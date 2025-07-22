@@ -27,7 +27,7 @@ function hidePopup(btn, popup) {
 }
 
 function hidePopupAndFocus(btn, popup) {
-  btn.focus();
+  if (btn) btn.focus();
   hidePopup(btn, popup);
 }
 
