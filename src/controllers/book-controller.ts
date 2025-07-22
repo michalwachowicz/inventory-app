@@ -23,6 +23,7 @@ import {
 } from "../types/book";
 import { checkPassword } from "../utils/password-utils";
 import { ISBNSchema } from "../types/isbn";
+import { getEntityDeleteMethod, getEntityPostForm } from "./entity-controller";
 
 async function renderBookForm(
   res: Response,
@@ -103,25 +104,18 @@ export async function fetchBookData(req: Request, res: Response) {
   }
 }
 
-export async function getBookEditForm(req: Request, res: Response) {
-  const bookId = Number(req.params.bookId);
-
-  if (isNaN(bookId)) {
-    res.status(400).send("Invalid book ID");
-    return;
-  }
-
-  const book = await getBookById(bookId);
-  if (book === null) {
-    res.status(404).send("Book not found");
-    return;
-  }
-
-  await renderBookForm(res, { action: "edit", book });
-}
-
 export async function getBookAddForm(_: Request, res: Response) {
   await renderBookForm(res, { action: "add" });
+}
+
+export function getBookEditForm() {
+  return getEntityPostForm<Book>("book", getBookById, async (res, book) => {
+    await renderBookForm(res, { action: "edit", book });
+  });
+}
+
+export function postBookDelete() {
+  return getEntityDeleteMethod("book", deleteBookById);
 }
 
 async function handleBookFormPost({
@@ -231,35 +225,4 @@ export async function getBook(req: Request, res: Response) {
     book: book || undefined,
     moreByAuthor,
   });
-}
-
-export async function postBookDelete(req: Request, res: Response) {
-  const bookId = Number(req.params.bookId);
-
-  if (isNaN(bookId)) {
-    res.status(400).send({ error: "Invalid book ID" });
-    return;
-  }
-
-  try {
-    const isAuthorized = await checkPassword(req.body.secret_password);
-    if (!isAuthorized) {
-      res.status(400).send({ error: "Invalid password" });
-      return;
-    }
-
-    const isDeleted = await deleteBookById(bookId);
-    if (!isDeleted) {
-      res.status(404).send({ error: "Book not found" });
-      return;
-    }
-
-    res.status(200).send({ message: "Book deleted successfully" });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      error: "Failed to fetch book data",
-      details: err instanceof Error ? err.message : "Unknown error",
-    });
-  }
 }

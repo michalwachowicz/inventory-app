@@ -33,9 +33,10 @@ export function getEntityAddForm(entityName: string) {
   };
 }
 
-export function getEntityPostForm(
+export function getEntityPostForm<T = Entity>(
   entityName: string,
-  getQuery: (id: number) => Promise<Entity | null>,
+  getQuery: (id: number) => Promise<T | null>,
+  renderFunction?: (res: Response, entity: T) => Promise<void>,
 ) {
   return async function (req: Request, res: Response) {
     const idParam = `${entityName}Id`;
@@ -52,7 +53,14 @@ export function getEntityPostForm(
       return;
     }
 
-    await renderEntityForm(res, { action: "edit", entityName, entity });
+    if (renderFunction) await renderFunction(res, entity as T);
+    else {
+      await renderEntityForm(res, {
+        action: "edit",
+        entityName,
+        entity: entity as Entity,
+      });
+    }
   };
 }
 

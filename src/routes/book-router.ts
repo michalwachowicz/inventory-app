@@ -16,11 +16,11 @@ bookRouter.get("/add", getBookAddForm);
 bookRouter.post("/add", postBookAdd);
 
 bookRouter.get("/edit/success", getSuccessView("book", "edited"));
-bookRouter.get("/edit/:bookId", getBookEditForm);
+bookRouter.get("/edit/:bookId", getBookEditForm());
 bookRouter.post("/edit/:bookId", postBookEdit);
 
 bookRouter.get("/delete/success", getSuccessView("book", "deleted"));
-bookRouter.post("/delete/:bookId", postBookDelete);
+bookRouter.post("/delete/:bookId", postBookDelete());
 
 bookRouter.get("/:bookId", getBook);
 
