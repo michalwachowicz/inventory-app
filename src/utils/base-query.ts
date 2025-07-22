@@ -1,10 +1,13 @@
 import { Request } from "express";
 
-export function buildBaseQueryString(req: Request) {
+export function buildBaseQueryString(
+  req: Request,
+  omit: string[] = ["currentPage"],
+) {
   const params: [string, string][] = [];
 
   for (const key in req.query) {
-    if (key === "currentPage") continue;
+    if (omit.includes(key)) continue;
 
     const value = req.query[key];
 
