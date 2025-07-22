@@ -4,7 +4,7 @@ import {
   getAuthorById,
   getBooksByAuthor,
 } from "../db/queries";
-import { renderSuccessView, renderView } from "../utils/viewRenderer";
+import { renderView } from "../utils/viewRenderer";
 import {
   AuthorRenderOptions,
   EntityFormRenderOptions,
@@ -132,16 +132,4 @@ export async function postAuthorDelete(req: Request, res: Response) {
       details: err instanceof Error ? err.message : "Unknown error",
     });
   }
-}
-
-export async function getAuthorDeleteSuccessView(_: Request, res: Response) {
-  await renderSuccessView(res, { entity: "author", action: "deleted" });
-}
-
-export async function getAuthorAddSuccessView(_: Request, res: Response) {
-  await renderSuccessView(res, { entity: "author", action: "added" });
-}
-
-export async function getAuthorEditSuccessView(_: Request, res: Response) {
-  await renderSuccessView(res, { entity: "author", action: "edited" });
 }

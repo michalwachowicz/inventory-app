@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { renderSuccessView, renderView } from "../utils/viewRenderer";
+import { renderView } from "../utils/viewRenderer";
 import {
   BookFormRenderOptions,
   BookRenderOptions,
@@ -262,16 +262,4 @@ export async function postBookDelete(req: Request, res: Response) {
       details: err instanceof Error ? err.message : "Unknown error",
     });
   }
-}
-
-export async function getBookDeleteSuccessView(_: Request, res: Response) {
-  await renderSuccessView(res, { entity: "book", action: "deleted" });
-}
-
-export async function getBookAddSuccessView(_: Request, res: Response) {
-  await renderSuccessView(res, { entity: "book", action: "added" });
-}
-
-export async function getBookEditSuccessView(_: Request, res: Response) {
-  await renderSuccessView(res, { entity: "book", action: "edited" });
 }

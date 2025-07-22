@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { checkPassword } from "../utils/password-utils";
 import { deleteGenreById, getGenreNameById } from "../db/queries";
-import { renderSuccessView, renderView } from "../utils/viewRenderer";
+import { renderView } from "../utils/viewRenderer";
 import { Genre } from "../types/genre";
 import { EntityFormRenderOptions } from "../types/render-options";
 import { capitalize } from "../utils/capitalize";
@@ -80,16 +80,4 @@ export async function postGenreDelete(req: Request, res: Response) {
       details: err instanceof Error ? err.message : "Unknown error",
     });
   }
-}
-
-export async function getGenreDeleteSuccessView(_: Request, res: Response) {
-  await renderSuccessView(res, { entity: "genre", action: "deleted" });
-}
-
-export async function getGenreAddSuccessView(_: Request, res: Response) {
-  await renderSuccessView(res, { entity: "genre", action: "added" });
-}
-
-export async function getGenreEditSuccessView(_: Request, res: Response) {
-  await renderSuccessView(res, { entity: "genre", action: "edited" });
 }
