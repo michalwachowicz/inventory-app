@@ -46,3 +46,7 @@ export interface ResultsRenderOptions extends RenderOptions {
 export interface QueryRenderOptions extends ResultsRenderOptions {
   query?: string;
 }
+
+export interface AuthorRenderOptions extends ResultsRenderOptions {
+  authorId: number;
+}

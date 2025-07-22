@@ -3,8 +3,33 @@
   <div class="results-page__header">
     <h1 class="results-page__title"><%= pageTitle %></h1>
 
-    <% if (locals.isAuthorPage) { %>
-    <!-- TODO: Add CRUD buttons -->
+    <% if (locals.authorId !== undefined && locals.authorId >= 0) { %>
+    <div class="genre-chip__container">
+      <button aria-label="edit author">
+        <img src="/assets/icons/edit.svg" alt="" width="28" height="28" />
+      </button>
+
+      <button id="btn-delete-author" aria-label="delete author">
+        <img src="/assets/icons/delete.svg" alt="" width="28" height="28" />
+      </button>
+    </div>
+
+    <script defer>
+      document.addEventListener("DOMContentLoaded", () => {
+        setupDeleteDialog(
+          "/author/delete/<%= authorId %>",
+          "/author/delete/success",
+          "Delete Author?",
+          "Are you sure you want to delete this author and all books related to it? This action is irreversible",
+        );
+
+        setupPopup(
+          "#btn-delete-author",
+          "#delete-dialog",
+          "#btn-delete-cancel",
+        );
+      });
+    </script>
     <% } %>
   </div>
   <% } %>
