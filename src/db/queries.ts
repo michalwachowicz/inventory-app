@@ -261,18 +261,35 @@ export async function checkBookByISBN(isbn: string) {
   return rows.length > 0;
 }
 
-export async function insertAuthor(name: string) {
-  await pool.query(`INSERT INTO authors (name) VALUES ($1)`, [name]);
+export function checkDuplicateEntity(table: string) {
+  return async function (name: string, id?: number) {
+    const params: (string | number)[] = [name];
+    let query = `SELECT * FROM ${table} WHERE name = $1`;
+
+    if (id !== undefined) {
+      params.push(id);
+      query += " AND id != $2";
+    }
+
+    const { rows } = await pool.query(query, params);
+    return rows.length > 0;
+  };
 }
 
-export async function insertGenre(name: string) {
-  await pool.query(`INSERT INTO genres (name) VALUES ($1)`, [name]);
+export function updateEntity(table: string) {
+  return async function (id: number, name: string) {
+    await pool.query(`UPDATE ${table} SET name = $1 WHERE id = $2`, [name, id]);
+  };
+}
+
+export function insertEntity(table: string) {
+  return async function (name: string) {
+    await pool.query(`INSERT INTO ${table} (name) VALUES ($1)`, [name]);
+  };
 }
 
 export async function getGenreById(id: number): Promise<Entity | null> {
-  const { rows } = await pool.query("SELECT name FROM genres WHERE id = $1", [
-    id,
-  ]);
+  const { rows } = await pool.query("SELECT * FROM genres WHERE id = $1", [id]);
 
   return rows.length > 0 ? rows[0] : null;
 }

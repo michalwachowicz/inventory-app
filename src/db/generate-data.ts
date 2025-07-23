@@ -1,4 +1,4 @@
-import { initDatabase, insertAuthor, insertBook, insertGenre } from "./queries";
+import { initDatabase, insertEntity, insertBook } from "./queries";
 import { authors, books, genres } from "./sample-data";
 
 async function generateData() {
@@ -7,10 +7,10 @@ async function generateData() {
     await initDatabase();
 
     console.log("Generating authors...");
-    for (const author of authors) await insertAuthor(author.name);
+    for (const author of authors) await insertEntity("authors")(author.name);
 
     console.log("Generating genres...");
-    for (const genre of genres) await insertGenre(genre.name);
+    for (const genre of genres) await insertEntity("genres")(genre.name);
 
     console.log("Generaing books...");
     for (const book of books) await insertBook(book);

@@ -1,9 +1,14 @@
 import { Request, Response } from "express";
-import { Entity } from "../types/entity";
+import { Entity, EntityFormData, EntityFormSchema } from "../types/entity";
 import { EntityFormRenderOptions } from "../types/render-options";
 import { capitalize } from "../utils/capitalize";
 import { renderView } from "../utils/view-renderer";
 import { checkPassword } from "../utils/password-utils";
+import {
+  checkDuplicateEntity,
+  insertEntity,
+  updateEntity,
+} from "../db/queries";
 
 export async function renderEntityForm(
   res: Response,
@@ -99,6 +104,75 @@ export function getEntityDeleteMethod(
       console.log(err);
       res.status(500).json({
         error: `Failed to delete ${entityName}, check console for details`,
+        details: err instanceof Error ? err.message : "Unknown error",
+      });
+    }
+  };
+}
+
+export function getEntityPostMethod({
+  action,
+  entityName,
+  table,
+}: {
+  action: "add" | "edit";
+  entityName: string;
+  table?: string;
+}) {
+  return async function (req: Request, res: Response) {
+    const errors: Record<string, string> = {};
+    const result = EntityFormSchema.safeParse(req.body);
+    let entityData: EntityFormData | null = null;
+
+    if (!result.success) {
+      for (const err of result.error.issues) {
+        if (err.path.length > 0) {
+          errors[err.path[0].toString()] = err.message;
+        }
+      }
+    } else {
+      entityData = result.data;
+    }
+
+    try {
+      const idParam = `${entityName}Id`;
+      const id = Number(req.params[idParam]);
+
+      if (action === "edit" && isNaN(id))
+        throw new Error(`Invalid ${entityName} ID`);
+
+      const { name } = req.body;
+      const tableName = table || `${entityName}s`;
+
+      const entityExists = await checkDuplicateEntity(tableName)(
+        name,
+        action === "edit" ? id : undefined,
+      );
+
+      if (entityExists)
+        errors.name = `${capitalize(entityName)} with this name already exists`;
+
+      const isAuthorized = await checkPassword(req.body.secret_password);
+      if (!isAuthorized) errors.secret_password = "Invalid password";
+
+      if (Object.keys(errors).length > 0 || !entityData) {
+        await renderEntityForm(res, {
+          action,
+          entityName,
+          entity: id ? { id, ...req.body } : undefined,
+          errors,
+        });
+        return;
+      }
+
+      if (action === "edit") await updateEntity(tableName)(id, name);
+      else await insertEntity(tableName)(name);
+
+      res.redirect(`/${entityName}/${action}/success`);
+    } catch (err) {
+      console.error("Unexpected error:", err);
+      res.status(500).json({
+        error: "Server error",
         details: err instanceof Error ? err.message : "Unknown error",
       });
     }

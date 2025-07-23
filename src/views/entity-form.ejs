@@ -1,5 +1,9 @@
 <% const actionCapitalized = locals.action[0].toUpperCase() + locals.action.slice(1) %>
 <% const entityCapitalized = locals.entityName[0].toUpperCase() + locals.entityName.slice(1) %>
+<% const actionPath = action === 'edit' && entity?.id 
+    ? `${action}/${entity.id}` 
+    : action;
+%>
 
 <div class="container book-form">
   <h1 class="book-form__title">
@@ -9,7 +13,7 @@
 
   <form
     class="book-form__form"
-    action="/<%= entityName %>/<%= `${locals.action}${locals.action === 'edit' && locals.entity?.id ? `/${locals.entity.id}` : ''}` %>"
+    action="/<%= entityName %>/<%= actionPath %>"
     method="post"
   >
     <div class="book-form__container">

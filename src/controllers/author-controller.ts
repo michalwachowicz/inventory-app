@@ -10,7 +10,15 @@ import {
   ErrorRenderOptions,
 } from "../types/render-options";
 import { buildBaseQueryString } from "../utils/base-query";
-import { getEntityDeleteMethod, getEntityPostForm } from "./entity-controller";
+import {
+  getEntityDeleteMethod,
+  getEntityPostForm,
+  getEntityPostMethod,
+} from "./entity-controller";
+
+function getAuthorPostMethod(action: "add" | "edit") {
+  return getEntityPostMethod({ action, entityName: "author" });
+}
 
 export function getAuthorEditForm() {
   return getEntityPostForm("author", getAuthorById);
@@ -18,6 +26,14 @@ export function getAuthorEditForm() {
 
 export function postAuthorDelete() {
   return getEntityDeleteMethod("author", deleteAuthorById);
+}
+
+export function postAuthorAdd() {
+  return getAuthorPostMethod("add");
+}
+
+export function postAuthorEdit() {
+  return getAuthorPostMethod("edit");
 }
 
 export async function getAuthorBooks(req: Request, res: Response) {
