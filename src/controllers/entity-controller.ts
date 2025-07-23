@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Entity, EntityFormData, EntityFormSchema } from "../types/entity";
+import { Entity, EntityFormSchema } from "../types/entity";
 import { EntityFormRenderOptions } from "../types/render-options";
 import { capitalize } from "../utils/capitalize";
 import {
@@ -14,6 +14,7 @@ import {
   insertEntity,
   updateEntity,
 } from "../db/queries";
+import { createZodErrorsObject } from "../utils/zod-error";
 
 export async function renderEntityForm(
   res: Response,
@@ -129,19 +130,8 @@ export function getEntityPostMethod({
   table?: string;
 }) {
   return async function (req: Request, res: Response) {
-    const errors: Record<string, string> = {};
     const result = EntityFormSchema.safeParse(req.body);
-    let entityData: EntityFormData | null = null;
-
-    if (!result.success) {
-      for (const err of result.error.issues) {
-        if (err.path.length > 0) {
-          errors[err.path[0].toString()] = err.message;
-        }
-      }
-    } else {
-      entityData = result.data;
-    }
+    const errors = createZodErrorsObject(result);
 
     try {
       const idParam = `${entityName}Id`;
@@ -164,7 +154,7 @@ export function getEntityPostMethod({
       const isAuthorized = await checkPassword(req.body.secret_password);
       if (!isAuthorized) errors.secret_password = "Invalid password";
 
-      if (Object.keys(errors).length > 0 || !entityData) {
+      if (Object.keys(errors).length > 0) {
         await renderEntityForm(res, {
           action,
           entityName,

@@ -28,6 +28,7 @@ import {
 import { checkPassword } from "../utils/password-utils";
 import { ISBNSchema } from "../types/isbn";
 import { getEntityDeleteMethod, getEntityPostForm } from "./entity-controller";
+import { createZodErrorsObject } from "../utils/zod-error";
 
 async function renderBookForm(
   res: Response,
@@ -135,19 +136,8 @@ async function handleBookFormPost({
   onValid: (book: BookFormData) => Promise<void>;
   checkDuplicate: boolean;
 }) {
-  const errors: Record<string, string> = {};
   const result = BookFormSchema.safeParse(req.body);
-  let book: BookFormData | null = null;
-
-  if (!result.success) {
-    for (const err of result.error.issues) {
-      if (err.path.length > 0) {
-        errors[err.path[0].toString()] = err.message;
-      }
-    }
-  } else {
-    book = result.data;
-  }
+  const errors = createZodErrorsObject(result);
 
   try {
     if (checkDuplicate && req.body.isbn) {
@@ -160,7 +150,7 @@ async function handleBookFormPost({
       errors.secret_password = "Invalid password";
     }
 
-    if (Object.keys(errors).length > 0 || !book) {
+    if (Object.keys(errors).length > 0) {
       await renderBookForm(res, {
         action,
         book: req.params.bookId
@@ -171,7 +161,7 @@ async function handleBookFormPost({
       return;
     }
 
-    await onValid(book);
+    await onValid(result.data!);
     res.redirect(`/book/${action}/success`);
   } catch (err) {
     console.error("Unexpected error:", err);
