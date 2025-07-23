@@ -5,9 +5,9 @@
 
     <% if (locals.authorId !== undefined && locals.authorId >= 0) { %>
     <div class="genre-chip__container">
-      <button aria-label="edit author">
+      <a href="/author/edit/<%= authorId %>" aria-label="edit author">
         <img src="/assets/icons/edit.svg" alt="" width="28" height="28" />
-      </button>
+      </a>
 
       <button id="btn-delete-author" aria-label="delete author">
         <img src="/assets/icons/delete.svg" alt="" width="28" height="28" />

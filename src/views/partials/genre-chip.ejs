@@ -23,9 +23,9 @@
 
   <% if (isSelected) { %>
   <div class="genre-chip__container">
-    <button aria-label="edit genre">
+    <a href="/genre/edit/<%= selectedGenre.id %>" aria-label="edit genre">
       <img src="/assets/icons/edit.svg" alt="" width="28" height="28" />
-    </button>
+    </a>
 
     <button id="btn-delete-genre" aria-label="delete genre">
       <img src="/assets/icons/delete.svg" alt="" width="28" height="28" />
