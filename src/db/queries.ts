@@ -2,6 +2,8 @@ import { Book, BookFormData } from "../types/book";
 import { Entity } from "../types/entity";
 import pool from "./pool";
 
+const PAGE_LIMIT = 5;
+
 async function createAuthorsTable() {
   await pool.query(`CREATE TABLE IF NOT EXISTS authors (
     id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
@@ -64,9 +66,7 @@ export async function getBooksByGenreAndQuery(options: {
   const { genreId, query, page = 1 } = options;
   const params: (number | string)[] = [];
   const conditions: string[] = [];
-
-  const limit = 10;
-  const offset = (page - 1) * limit;
+  const offset = (page - 1) * PAGE_LIMIT;
 
   if (genreId) {
     conditions.push(`genre_id = $${params.length + 1}`);
@@ -100,7 +100,7 @@ export async function getBooksByGenreAndQuery(options: {
 
   const countResult = await pool.query(countSql, params);
   const totalCount = parseInt(countResult.rows[0].count, 10);
-  const pages = Math.ceil(totalCount / limit);
+  const pages = Math.ceil(totalCount / PAGE_LIMIT);
 
   const booksSql = `
     SELECT books.*, authors.name AS author, genres.name AS genre 
@@ -109,7 +109,7 @@ export async function getBooksByGenreAndQuery(options: {
     INNER JOIN genres ON books.genre_id = genres.id 
     ${whereClause} 
     ORDER BY id DESC 
-    LIMIT ${limit} 
+    LIMIT ${PAGE_LIMIT} 
     OFFSET ${offset} 
   `;
 
@@ -122,8 +122,7 @@ export async function getBooksByAuthor(
   authorId: number,
   page: number = 1,
 ): Promise<{ books: Book[]; pages: number }> {
-  const limit = 10;
-  const offset = (page - 1) * limit;
+  const offset = (page - 1) * PAGE_LIMIT;
 
   const countSql = await pool.query(
     `SELECT COUNT(*) FROM books 
@@ -134,7 +133,7 @@ export async function getBooksByAuthor(
   );
 
   const totalCount = parseInt(countSql.rows[0].count, 10);
-  const pages = Math.ceil(totalCount / limit);
+  const pages = Math.ceil(totalCount / PAGE_LIMIT);
 
   const booksSql = await pool.query(
     `SELECT books.*, authors.name AS author, genres.name AS genre 
@@ -144,7 +143,7 @@ export async function getBooksByAuthor(
      WHERE books.author_id = $1 
      ORDER BY id DESC 
      LIMIT $2 OFFSET $3`,
-    [authorId, limit, offset],
+    [authorId, PAGE_LIMIT, offset],
   );
 
   return { books: booksSql.rows, pages };
