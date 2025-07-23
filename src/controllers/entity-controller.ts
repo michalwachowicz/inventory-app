@@ -2,7 +2,12 @@ import { Request, Response } from "express";
 import { Entity, EntityFormData, EntityFormSchema } from "../types/entity";
 import { EntityFormRenderOptions } from "../types/render-options";
 import { capitalize } from "../utils/capitalize";
-import { renderView } from "../utils/view-renderer";
+import {
+  renderErrorView,
+  renderInvalidIdErrorView,
+  renderServerErrorView,
+  renderView,
+} from "../utils/view-renderer";
 import { checkPassword } from "../utils/password-utils";
 import {
   checkDuplicateEntity,
@@ -46,15 +51,19 @@ export function getEntityPostForm<T = Entity>(
   return async function (req: Request, res: Response) {
     const idParam = `${entityName}Id`;
     const id = Number(req.params[idParam]);
+    const capitalizedEntity = capitalize(entityName);
 
     if (isNaN(id)) {
-      res.status(400).send(`Invalid ${entityName} ID`);
+      renderInvalidIdErrorView(res, entityName);
       return;
     }
 
     const entity = await getQuery(id);
     if (entity === null) {
-      res.status(404).send(`${capitalize(entityName)} not found`);
+      renderErrorView(res, {
+        title: `${capitalizedEntity} Not Found`,
+        errorMessage: `${capitalizedEntity} with ID ${id} was not found`,
+      });
       return;
     }
 
@@ -171,10 +180,7 @@ export function getEntityPostMethod({
       res.redirect(`/${entityName}/${action}/success`);
     } catch (err) {
       console.error("Unexpected error:", err);
-      res.status(500).json({
-        error: "Server error",
-        details: err instanceof Error ? err.message : "Unknown error",
-      });
+      renderServerErrorView(res, err);
     }
   };
 }

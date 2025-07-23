@@ -1,6 +1,10 @@
 import { Response } from "express";
 import { getGenres } from "../db/queries";
-import { RenderOptions, SuccessRenderOptions } from "../types/render-options";
+import {
+  ErrorRenderOptions,
+  RenderOptions,
+  SuccessRenderOptions,
+} from "../types/render-options";
 import { capitalize } from "./capitalize";
 import { Entity } from "../types/entity";
 
@@ -23,4 +27,34 @@ export async function renderSuccessView(
   };
 
   res.render("success", viewOptions);
+}
+
+export async function renderErrorView(
+  res: Response,
+  options: Pick<ErrorRenderOptions, "title" | "errorMessage">,
+) {
+  await renderView<ErrorRenderOptions>(res, {
+    viewName: "error",
+    navbar: "basic",
+    ...options,
+  });
+}
+
+export async function renderInvalidIdErrorView(
+  res: Response,
+  entityName: string,
+) {
+  const capitalizedEntity = capitalize(entityName);
+
+  renderErrorView(res, {
+    title: `Invalid ${capitalizedEntity} ID`,
+    errorMessage: `${capitalizedEntity} ID must be a number`,
+  });
+}
+
+export async function renderServerErrorView(res: Response, err: unknown) {
+  renderErrorView(res, {
+    title: "Server Error",
+    errorMessage: err instanceof Error ? err.message : "Unknown error",
+  });
 }

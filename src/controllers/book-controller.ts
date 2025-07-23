@@ -1,5 +1,9 @@
 import { Request, Response } from "express";
-import { renderView } from "../utils/view-renderer";
+import {
+  renderInvalidIdErrorView,
+  renderServerErrorView,
+  renderView,
+} from "../utils/view-renderer";
 import {
   BookFormRenderOptions,
   BookRenderOptions,
@@ -171,10 +175,7 @@ async function handleBookFormPost({
     res.redirect(`/book/${action}/success`);
   } catch (err) {
     console.error("Unexpected error:", err);
-    res.status(500).json({
-      error: "Server error",
-      details: err instanceof Error ? err.message : "Unknown error",
-    });
+    renderServerErrorView(res, err);
   }
 }
 
@@ -192,7 +193,7 @@ export async function postBookEdit(req: Request, res: Response) {
   const bookId = Number(req.params.bookId);
 
   if (isNaN(bookId)) {
-    res.status(400).send("Invalid book ID");
+    renderInvalidIdErrorView(res, "book");
     return;
   }
 
@@ -209,7 +210,7 @@ export async function getBook(req: Request, res: Response) {
   const bookId = Number(req.params.bookId);
 
   if (isNaN(bookId)) {
-    res.status(400).send("Invalid book ID");
+    renderInvalidIdErrorView(res, "book");
     return;
   }
 

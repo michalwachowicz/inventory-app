@@ -4,11 +4,8 @@ import {
   getAuthorById,
   getBooksByAuthor,
 } from "../db/queries";
-import { renderView } from "../utils/view-renderer";
-import {
-  AuthorRenderOptions,
-  ErrorRenderOptions,
-} from "../types/render-options";
+import { renderErrorView, renderView } from "../utils/view-renderer";
+import { AuthorRenderOptions } from "../types/render-options";
 import { buildBaseQueryString } from "../utils/base-query";
 import {
   getEntityDeleteMethod,
@@ -40,10 +37,8 @@ export async function getAuthorBooks(req: Request, res: Response) {
   const authorId = Number(req.params.authorId);
 
   if (isNaN(authorId)) {
-    renderView<ErrorRenderOptions>(res, {
-      viewName: "error",
+    renderErrorView(res, {
       title: "Invalid Author ID",
-      navbar: "basic",
       errorMessage: "Author ID must be a number.",
     });
     return;
@@ -52,10 +47,8 @@ export async function getAuthorBooks(req: Request, res: Response) {
   const author = await getAuthorById(authorId);
 
   if (!author) {
-    renderView<ErrorRenderOptions>(res, {
-      viewName: "error",
+    renderErrorView(res, {
       title: "Author Not Found",
-      navbar: "basic",
       errorMessage: `Author with ID ${authorId} was not found.`,
     });
     return;
