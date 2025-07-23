@@ -54,7 +54,7 @@ export async function getAuthorBooks(req: Request, res: Response) {
     return;
   }
 
-  const currentPage = req.query.page ? Number(req.query.page) : 1;
+  const currentPage = req.query.currentPage ? Number(req.query.currentPage) : 1;
   const { books: results, pages } = await getBooksByAuthor(
     authorId,
     currentPage,
