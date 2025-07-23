@@ -3,7 +3,7 @@
 === "string" && locals.selectedGenre.name.trim() !== ""; %>
 
 <div class="genre-chip">
-  <div class="genre-chip__container">
+  <div class="entity-modifier__btns">
     <% if (isSelected) { %>
     <a
       href="<%= locals.baseQueryString ? `/results?${baseQueryString}` : '/' %>"
@@ -25,7 +25,7 @@
   </div>
 
   <% if (isSelected) { %>
-  <div class="genre-chip__container">
+  <div class="entity-modifier__btns">
     <a href="/genre/edit/<%= selectedGenre.id %>" aria-label="edit genre">
       <img src="/assets/icons/edit.svg" alt="" width="28" height="28" />
     </a>

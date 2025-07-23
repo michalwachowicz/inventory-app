@@ -1,16 +1,16 @@
 <% const actionCapitalized = locals.action[0].toUpperCase() + locals.action.slice(1) %>
 <% const isEdit = locals.action === 'edit' %>
 
-<div class="container book-form">
-  <h1 class="book-form__title"><%= actionCapitalized %> a Book</h1>
+<div class="container form">
+  <h1 class="form__title"><%= actionCapitalized %> a Book</h1>
 
   <form
-    class="book-form__form"
+    class="form__form"
     action="/book/<%= `${locals.action}${isEdit && locals.book?.id ? `/${locals.book.id}` : ''}` %>"
     method="post"
   >
-    <div class="book-form__container">
-      <div class="book-form__input-group">
+    <div class="form__container">
+      <div class="form__input-group">
         <%- include("partials/isbn-field", { book: locals.book, errors:
         locals.errors, isEdit }) %>
 
@@ -34,7 +34,7 @@
         <% } %>
       </div>
 
-      <div class="book-form__input-group">
+      <div class="form__input-group">
         <%- include('partials/select', { field: 'author_id', title: 'Author',
         elements: locals.authors, book: locals.book, errors: locals.errors }) %>
 
@@ -44,7 +44,7 @@
         </div>
       </div>
 
-      <div class="book-form__input-group">
+      <div class="form__input-group">
         <%- include('partials/select', { field: 'genre_id', title: 'Genre',
         elements: locals.genres, book: locals.book, errors: locals.errors }) %>
 

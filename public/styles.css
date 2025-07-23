@@ -76,7 +76,7 @@ a {
   padding: 0.75rem 1.5rem;
 }
 
-.btn--empty-state {
+.btn--block {
   width: 100%;
   max-width: 22rem;
 }
@@ -159,12 +159,6 @@ a {
   align-items: center;
   gap: 2rem;
   margin-top: 1.25rem;
-}
-
-.genre-chip__container {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
 }
 
 .genre-chip__chip {
@@ -661,25 +655,25 @@ a {
   margin-top: 4rem;
 }
 
-.book-form {
+.form {
   margin-top: 3rem;
   margin-bottom: 3rem;
 }
 
-.book-form__title {
+.form__title {
   font-size: 1.75rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
 }
 
-.book-form__form {
+.form__form {
   display: flex;
   flex-direction: column;
   align-items: start;
   gap: 2rem;
 }
 
-.book-form__container {
+.form__container {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
@@ -687,7 +681,7 @@ a {
   max-width: 420px;
 }
 
-.book-form__input-group {
+.form__input-group {
   display: flex;
   flex-direction: column;
   align-items: end;
@@ -863,6 +857,12 @@ a {
   font-size: 1.75rem;
   font-weight: 700;
   text-align: center;
+}
+
+.entity-modifier__btns {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
 @keyframes fade-in {
