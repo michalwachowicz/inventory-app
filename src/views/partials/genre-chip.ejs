@@ -5,9 +5,12 @@
 <div class="genre-chip">
   <div class="genre-chip__container">
     <% if (isSelected) { %>
-    <button aria-label="close genre">
+    <a
+      href="<%= locals.baseQueryString ? `/results?${baseQueryString}` : '/' %>"
+      aria-label="close genre"
+    >
       <img src="/assets/icons/close.svg" alt="" width="32" height="32" />
-    </button>
+    </a>
     <% } %>
 
     <button
