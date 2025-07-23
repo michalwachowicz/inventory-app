@@ -2,12 +2,7 @@ import express from "express";
 import path from "path";
 import { config } from "dotenv";
 import { initDatabase } from "./db/queries";
-import homeRouter from "./routes/home-router";
-import resultsRouter from "./routes/results-router";
-import authorRouter from "./routes/author-router";
-import bookRouter from "./routes/book-router";
-import apiRouter from "./routes/api-router";
-import genreRouter from "./routes/genre-router";
+import { registerRouters } from "./routes/router-registry";
 
 config();
 
@@ -21,12 +16,7 @@ app.use(express.json());
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
-app.use("/", homeRouter);
-app.use("/results", resultsRouter);
-app.use("/author", authorRouter);
-app.use("/book", bookRouter);
-app.use("/genre", genreRouter);
-app.use("/api", apiRouter);
+registerRouters(app);
 
 app.get("/{*splat}", (_, res) => {
   res.render("not-found");
