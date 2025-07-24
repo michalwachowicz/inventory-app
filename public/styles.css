@@ -126,7 +126,7 @@ a {
   top: 0;
   background-color: #121212;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
-  z-index: 1;
+  z-index: 2;
 }
 
 .navbar__content {
@@ -186,7 +186,7 @@ a {
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 1;
+  z-index: 3;
 }
 
 .dialog__backdrop {
@@ -819,6 +819,7 @@ a {
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
   opacity: 0;
   height: 0;
+  z-index: 1;
 }
 
 .tooltip__link-wrapper {
