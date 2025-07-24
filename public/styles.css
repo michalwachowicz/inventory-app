@@ -40,7 +40,8 @@ a {
 
 .btn {
   display: block;
-  transition: transform 0.5s ease-out;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
 }
 
 .btn:disabled {
@@ -48,9 +49,8 @@ a {
   cursor: not-allowed;
 }
 
-.btn:hover {
-  transform: scale(1.05);
-  transition: transform 0.3s ease-in;
+.btn:hover:not(:disabled) {
+  transform: scale(1.04);
 }
 
 .btn--primary {
@@ -282,6 +282,7 @@ a {
   right: 0;
   background-color: var(--color-popup);
   border-radius: 0.5rem;
+  animation: add-menu 0.15s ease-in forwards;
 }
 
 .add-menu__btn {
@@ -307,6 +308,7 @@ a {
   left: 0;
   background-color: rgba(18, 18, 18, 0.6);
   backdrop-filter: blur(10px);
+  animation: fade-in 0.15s ease-in forwards;
 }
 
 .genres__container {
@@ -882,8 +884,20 @@ a {
 
 @keyframes slide-in {
   from {
-    opacity: 0.25;
-    transform: scale(0.5) translateY(-100%);
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes add-menu {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-4px);
   }
 
   to {
