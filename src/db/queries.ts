@@ -53,7 +53,13 @@ export async function getGenres(): Promise<Entity[]> {
 
 export async function getRecentlyAddedBooks(): Promise<Book[]> {
   const { rows } = await pool.query(
-    `SELECT * FROM books ORDER BY id DESC LIMIT 4`,
+    `SELECT books.*, authors.name AS author, genres.name AS genre 
+      FROM books
+      INNER JOIN authors ON books.author_id = authors.id
+      INNER JOIN genres ON books.genre_id = genres.id 
+      ORDER BY id DESC 
+      LIMIT 4
+    `,
   );
   return rows;
 }
