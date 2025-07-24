@@ -42,7 +42,14 @@
 
   <div class="book__btns">
     <a href="/book/edit/<%= book.id %>" class="btn btn--primary">Edit</a>
-    <button id="btn-delete-book" type="button" class="btn btn--delete">
+    <button
+      id="btn-delete-book"
+      type="button"
+      class="btn btn--delete"
+      aria-haspopup="dialog"
+      aria-controls="delete-dialog"
+      aria-expanded="false"
+    >
       Delete
     </button>
   </div>

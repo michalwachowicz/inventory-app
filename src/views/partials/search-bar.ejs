@@ -3,7 +3,12 @@
   id="searchbar"
   role="dialog"
   aria-modal="true"
+  aria-labelledby="searchbar-title"
 >
+  <div hidden>
+    <h2 id="searchbar-title">Search</h2>
+  </div>
+
   <form
     class="popup dialog__content searchbar__form"
     action="/results"

@@ -16,6 +16,9 @@
     <button
       id="btn-open-genres"
       class="genre-chip__chip<%= isSelected ? ' genre-chip__chip--selected' : '' %>"
+      aria-haspopup="dialog"
+      aria-controls="genres-menu"
+      aria-expanded="false"
     >
       <%= isSelected ? locals.selectedGenre.name : "Genres" %>
       <img src="/assets/icons/dropdown.svg" alt="" width="24" height="24" />
@@ -30,7 +33,13 @@
       <img src="/assets/icons/edit.svg" alt="" width="28" height="28" />
     </a>
 
-    <button id="btn-delete-genre" aria-label="delete genre">
+    <button
+      id="btn-delete-genre"
+      aria-label="delete genre"
+      aria-haspopup="dialog"
+      aria-controls="delete-dialog"
+      aria-expanded="false"
+    >
       <img src="/assets/icons/delete.svg" alt="" width="28" height="28" />
     </button>
   </div>
