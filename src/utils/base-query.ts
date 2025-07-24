@@ -4,20 +4,14 @@ export function buildBaseQueryString(
   req: Request,
   omit: string[] = ["currentPage"],
 ) {
-  const params: [string, string][] = [];
+  const params: Record<string, string> = {};
 
   for (const key in req.query) {
     if (omit.includes(key)) continue;
-
     const value = req.query[key];
 
-    if (typeof value === "string") {
-      params.push([key, value]);
-    } else if (Array.isArray(value)) {
-      for (const v of value) {
-        if (typeof v === "string") params.push([key, v]);
-      }
-    }
+    if (typeof value === "string") params[key] = value;
+    else if (Array.isArray(value)) params[key] = value.join(",");
   }
 
   return new URLSearchParams(params).toString();

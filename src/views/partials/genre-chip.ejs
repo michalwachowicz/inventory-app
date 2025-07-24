@@ -6,7 +6,7 @@
   <div class="entity-modifier__btns">
     <% if (isSelected) { %>
     <a
-      href="<%= locals.baseQueryString ? `/results?${baseQueryString}` : '/' %>"
+      href="<%= locals.noGenreQueryString ? `/results?${noGenreQueryString}` : '/' %>"
       aria-label="close genre"
     >
       <img src="/assets/icons/close.svg" alt="" width="32" height="32" />

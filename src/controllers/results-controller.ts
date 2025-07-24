@@ -36,9 +36,7 @@ export async function getResults(req: Request, res: Response) {
     results,
     currentPage: page,
     selectedGenre,
-    baseQueryString: buildBaseQueryString(
-      req,
-      req.query.genreId ? ["currentPage"] : ["currentPage", "genreId"],
-    ),
+    baseQueryString: buildBaseQueryString(req, ["currentPage"]),
+    noGenreQueryString: buildBaseQueryString(req, ["genreId", "currentPage"]),
   });
 }

@@ -51,6 +51,7 @@ export interface ResultsRenderOptions extends RenderOptions {
 
 export interface QueryRenderOptions extends ResultsRenderOptions {
   query?: string;
+  noGenreQueryString: string;
 }
 
 export interface AuthorRenderOptions extends ResultsRenderOptions {
