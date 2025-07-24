@@ -18,6 +18,7 @@ function focusFirstElement(container) {
 }
 
 function hidePopup(btn, popup) {
+  document.body.style.overflow = "initial";
   popup.classList.add("hidden");
   btn.setAttribute("aria-expanded", false);
 
@@ -43,6 +44,7 @@ function setupPopup(btnSelector, popupSelector, closeBtnSelector) {
       return;
     }
 
+    document.body.style.overflow = "hidden";
     popup.classList.remove("hidden");
     btn.setAttribute("aria-expanded", true);
 
