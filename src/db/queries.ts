@@ -62,10 +62,12 @@ async function createSecretPasswordTable() {
 }
 
 export async function initDatabase() {
-  await createAuthorsTable();
-  await createGenresTable();
-  await createBooksTable();
-  await createSecretPasswordTable();
+  await Promise.all([
+    createAuthorsTable(),
+    createGenresTable(),
+    createBooksTable(),
+    createSecretPasswordTable(),
+  ]);
 }
 
 export async function getEntities(key: CacheKey): Promise<Entity[]> {
