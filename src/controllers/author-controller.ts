@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import {
-  deleteAuthorById,
-  getAuthorById,
+  deleteEntityById,
   getBooksByAuthor,
+  getEntityById,
 } from "../db/queries";
 import { renderErrorView, renderView } from "../utils/view-renderer";
 import { AuthorRenderOptions } from "../types/render-options";
@@ -18,11 +18,11 @@ function getAuthorPostMethod(action: "add" | "edit") {
 }
 
 export function getAuthorEditForm() {
-  return getEntityPostForm("author", getAuthorById);
+  return getEntityPostForm("author", getEntityById("authors"));
 }
 
 export function postAuthorDelete() {
-  return getEntityDeleteMethod("author", deleteAuthorById);
+  return getEntityDeleteMethod("author", deleteEntityById("authors"));
 }
 
 export function postAuthorAdd() {
@@ -44,7 +44,7 @@ export async function getAuthorBooks(req: Request, res: Response) {
     return;
   }
 
-  const author = await getAuthorById(authorId);
+  const author = await getEntityById("authors")(authorId);
 
   if (!author) {
     renderErrorView(res, {

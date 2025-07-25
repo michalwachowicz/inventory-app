@@ -1,4 +1,4 @@
-import { deleteGenreById, getGenreById } from "../db/queries";
+import { deleteEntityById, getEntityById } from "../db/queries";
 import {
   getEntityDeleteMethod,
   getEntityPostForm,
@@ -10,11 +10,11 @@ function getGenrePostMethod(action: "add" | "edit") {
 }
 
 export function getGenreEditForm() {
-  return getEntityPostForm("genre", getGenreById);
+  return getEntityPostForm("genre", getEntityById("genres"));
 }
 
 export function postGenreDelete() {
-  return getEntityDeleteMethod("genre", deleteGenreById);
+  return getEntityDeleteMethod("genre", deleteEntityById("genres"));
 }
 
 export function postGenreAdd() {

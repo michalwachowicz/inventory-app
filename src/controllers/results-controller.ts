@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { renderView } from "../utils/view-renderer";
 import { QueryRenderOptions } from "../types/render-options";
 import { buildBaseQueryString } from "../utils/base-query";
-import { getBooksByGenreAndQuery, getGenreById } from "../db/queries";
+import { getBooksByGenreAndQuery, getEntityById } from "../db/queries";
 import { Entity } from "../types/entity";
 
 export async function getResults(req: Request, res: Response) {
@@ -13,7 +13,7 @@ export async function getResults(req: Request, res: Response) {
   let selectedGenre: Entity | undefined;
 
   if (genreId) {
-    const genre = await getGenreById(genreId);
+    const genre = await getEntityById("genres")(genreId);
     if (genre) selectedGenre = genre;
   }
 

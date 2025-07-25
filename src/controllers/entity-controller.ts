@@ -15,6 +15,7 @@ import {
   updateEntity,
 } from "../db/queries";
 import { createZodErrorsObject } from "../utils/zod-error";
+import { isCacheEntityKey } from "../cache/entity-cache";
 
 export async function renderEntityForm(
   res: Response,
@@ -164,8 +165,10 @@ export function getEntityPostMethod({
         return;
       }
 
-      if (action === "edit") await updateEntity(tableName)(id, name);
-      else await insertEntity(tableName)(name);
+      if (isCacheEntityKey(tableName)) {
+        if (action === "edit") await updateEntity(tableName)(id, name);
+        else await insertEntity(tableName)(name);
+      }
 
       res.redirect(`/${entityName}/${action}/success`);
     } catch (err) {

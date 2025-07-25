@@ -10,11 +10,10 @@ import {
 } from "../types/render-options";
 import {
   checkBookByISBN,
-  deleteBookById,
+  deleteEntityById,
   getAuthorByName,
-  getAuthors,
   getBookById,
-  getGenres,
+  getEntities,
   getMoreBooksByAuthor,
   insertBook,
   updateBook,
@@ -38,8 +37,8 @@ async function renderBookForm(
     errors?: Record<string, string>;
   },
 ) {
-  const authors = await getAuthors();
-  const genres = await getGenres();
+  const authors = await getEntities("authors");
+  const genres = await getEntities("genres");
 
   const { action, book, errors } = options;
 
@@ -120,7 +119,7 @@ export function getBookEditForm() {
 }
 
 export function postBookDelete() {
-  return getEntityDeleteMethod("book", deleteBookById);
+  return getEntityDeleteMethod("book", deleteEntityById("books"));
 }
 
 async function handleBookFormPost({

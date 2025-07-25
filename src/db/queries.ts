@@ -1,8 +1,30 @@
+import {
+  cacheBooksByEntity,
+  cacheRecentlyAddedBooks,
+  getCachedBookById,
+  getCachedBooksByEntity,
+  getCachedPagesByEntity,
+  getCachedRecentlyAddedBooks,
+  invalidateCachedBooks,
+} from "../cache/book-cache";
+import {
+  cacheEntity,
+  CacheKey,
+  deleteCachedEntity,
+  getCachedEntity,
+  getCachedEntityList,
+  isCacheEntityKey,
+  updateCachedEntityList,
+} from "../cache/entity-cache";
+import {
+  getCachedPassword,
+  updateCachedPassword,
+} from "../cache/password-cache";
 import { Book, BookFormData } from "../types/book";
 import { Entity } from "../types/entity";
 import pool from "./pool";
 
-const PAGE_LIMIT = 5;
+const PAGE_LIMIT = 6;
 
 async function createAuthorsTable() {
   await pool.query(`CREATE TABLE IF NOT EXISTS authors (
@@ -46,12 +68,70 @@ export async function initDatabase() {
   await createSecretPasswordTable();
 }
 
-export async function getGenres(): Promise<Entity[]> {
-  const { rows } = await pool.query(`SELECT * FROM genres`);
+export async function getEntities(key: CacheKey): Promise<Entity[]> {
+  const cachedGenres = getCachedEntityList(key);
+  if (cachedGenres.length > 0) return cachedGenres;
+
+  const { rows } = await pool.query(`SELECT * FROM ${key}`);
+  updateCachedEntityList(key, rows);
+
   return rows;
 }
 
+export function getEntityById(key: CacheKey) {
+  return async function (id: number) {
+    const cachedEntity = getCachedEntity(key, id);
+    if (cachedEntity) return cachedEntity;
+
+    const { rows } = await pool.query(`SELECT * FROM ${key} WHERE id = $1`, [
+      id,
+    ]);
+
+    if (rows.length === 0) return null;
+
+    const entity: Entity = rows[0];
+    cacheEntity(key, entity);
+
+    return entity;
+  };
+}
+
+export function deleteEntityById(table: string) {
+  return async function (id: number): Promise<boolean> {
+    const result = await pool.query(
+      `DELETE FROM ${table} WHERE id = $1 RETURNING id`,
+      [id],
+    );
+
+    if (isCacheEntityKey(table)) deleteCachedEntity(table, id);
+
+    return (result.rowCount ?? 0) > 0;
+  };
+}
+
+export function updateEntity(key: CacheKey) {
+  return async function (id: number, name: string) {
+    await pool.query(`UPDATE ${key} SET name = $1 WHERE id = $2`, [name, id]);
+    cacheEntity(key, { id, name });
+  };
+}
+
+export function insertEntity(key: CacheKey) {
+  return async function (name: string) {
+    const { rows } = await pool.query(
+      `INSERT INTO ${key} (name) VALUES ($1) RETURNING id`,
+      [name],
+    );
+
+    const id = rows[0]?.id;
+    if (id !== undefined) cacheEntity(key, { id, name });
+  };
+}
+
 export async function getRecentlyAddedBooks(): Promise<Book[]> {
+  const cachedRecentlyAddedBooks = getCachedRecentlyAddedBooks();
+  if (cachedRecentlyAddedBooks !== null) return cachedRecentlyAddedBooks;
+
   const { rows } = await pool.query(
     `SELECT books.*, authors.name AS author, genres.name AS genre 
       FROM books
@@ -61,6 +141,8 @@ export async function getRecentlyAddedBooks(): Promise<Book[]> {
       LIMIT 4
     `,
   );
+  cacheRecentlyAddedBooks(rows);
+
   return rows;
 }
 
@@ -68,8 +150,30 @@ export async function getBooksByGenreAndQuery(options: {
   genreId?: number;
   query?: string;
   page?: number;
+  useCache?: boolean;
 }): Promise<{ books: Book[]; pages: number }> {
-  const { genreId, query, page = 1 } = options;
+  const { genreId, query, page = 1, useCache = true } = options;
+
+  if (useCache && genreId && !query) {
+    const cachedBooks = getCachedBooksByEntity("genre", genreId, page);
+
+    if (cachedBooks) {
+      return {
+        books: cachedBooks,
+        pages: getCachedPagesByEntity("genre", genreId),
+      };
+    } else {
+      const { pages, books } = await getBooksByGenreAndQuery({
+        genreId,
+        page,
+        useCache: false,
+      });
+      cacheBooksByEntity("genre", { id: genreId, books, page, pages });
+
+      return { pages, books };
+    }
+  }
+
   const params: (number | string)[] = [];
   const conditions: string[] = [];
   const offset = (page - 1) * PAGE_LIMIT;
@@ -128,6 +232,14 @@ export async function getBooksByAuthor(
   authorId: number,
   page: number = 1,
 ): Promise<{ books: Book[]; pages: number }> {
+  const cachedBooks = getCachedBooksByEntity("author", authorId, page);
+  if (cachedBooks) {
+    return {
+      books: cachedBooks,
+      pages: getCachedPagesByEntity("author", authorId),
+    };
+  }
+
   const offset = (page - 1) * PAGE_LIMIT;
 
   const countSql = await pool.query(
@@ -141,7 +253,7 @@ export async function getBooksByAuthor(
   const totalCount = parseInt(countSql.rows[0].count, 10);
   const pages = Math.ceil(totalCount / PAGE_LIMIT);
 
-  const booksSql = await pool.query(
+  const { rows: books } = await pool.query(
     `SELECT books.*, authors.name AS author, genres.name AS genre 
      FROM books 
      INNER JOIN authors ON books.author_id = authors.id 
@@ -152,24 +264,14 @@ export async function getBooksByAuthor(
     [authorId, PAGE_LIMIT, offset],
   );
 
-  return { books: booksSql.rows, pages };
-}
-
-export async function getAuthorById(authorId: number): Promise<Entity | null> {
-  const { rows } = await pool.query(
-    `SELECT id, name FROM authors WHERE id = $1`,
-    [authorId],
-  );
-
-  return rows.length ? rows[0] : null;
-}
-
-export async function getAuthors(): Promise<Entity[]> {
-  const { rows } = await pool.query(`SELECT * FROM authors`);
-  return rows;
+  cacheBooksByEntity("author", { id: authorId, page, pages, books });
+  return { books, pages };
 }
 
 export async function getBookById(bookId: number): Promise<Book | null> {
+  const cachedBook = getCachedBookById(bookId);
+  if (cachedBook) return cachedBook;
+
   const { rows } = await pool.query(
     `SELECT books.*, authors.name AS author, genres.name AS genre 
      FROM books 
@@ -192,10 +294,17 @@ export async function getAuthorByName(name: string): Promise<Entity | null> {
 }
 
 export async function getSecretPassword(): Promise<string> {
+  const cachedPassword = getCachedPassword();
+  if (cachedPassword !== null) return cachedPassword;
+
   const { rows } = await pool.query(
     `SELECT password FROM secret_password WHERE id = 1`,
   );
-  return rows.length ? rows[0].password : "";
+
+  const password = rows.length ? rows[0].password : "";
+  updateCachedPassword(password);
+
+  return password;
 }
 
 export async function updateSecretPassword(password: string) {
@@ -211,6 +320,8 @@ export async function updateSecretPassword(password: string) {
       [password],
     );
   }
+
+  updateCachedPassword(password);
 }
 
 export async function insertBook(book: BookFormData) {
@@ -231,6 +342,8 @@ export async function insertBook(book: BookFormData) {
       book.genre_id,
     ],
   );
+
+  invalidateCachedBooks(book.author_id, book.genre_id);
 }
 
 export async function updateBook(id: number, bookData: BookFormData) {
@@ -256,6 +369,8 @@ export async function updateBook(id: number, bookData: BookFormData) {
       id,
     ],
   );
+
+  invalidateCachedBooks(bookData.author_id, bookData.genre_id);
 }
 
 export async function checkBookByISBN(isbn: string) {
@@ -281,28 +396,17 @@ export function checkDuplicateEntity(table: string) {
   };
 }
 
-export function updateEntity(table: string) {
-  return async function (id: number, name: string) {
-    await pool.query(`UPDATE ${table} SET name = $1 WHERE id = $2`, [name, id]);
-  };
-}
-
-export function insertEntity(table: string) {
-  return async function (name: string) {
-    await pool.query(`INSERT INTO ${table} (name) VALUES ($1)`, [name]);
-  };
-}
-
-export async function getGenreById(id: number): Promise<Entity | null> {
-  const { rows } = await pool.query("SELECT * FROM genres WHERE id = $1", [id]);
-
-  return rows.length > 0 ? rows[0] : null;
-}
-
 export async function getMoreBooksByAuthor(
   authorId: number,
   bookId: number,
 ): Promise<Book[]> {
+  const cachedBooks = getCachedBooksByEntity("author", authorId);
+  if (cachedBooks) {
+    return cachedBooks.filter((book) => book.id !== bookId).slice(0, 5);
+  }
+
+  await getBooksByAuthor(authorId);
+
   const { rows } = await pool.query(
     `SELECT books.*, authors.name AS author, genres.name AS genre 
      FROM books 
@@ -315,31 +419,4 @@ export async function getMoreBooksByAuthor(
   );
 
   return rows;
-}
-
-export async function deleteBookById(bookId: number): Promise<boolean> {
-  const result = await pool.query(
-    `DELETE FROM books WHERE id = $1 RETURNING id`,
-    [bookId],
-  );
-
-  return (result.rowCount ?? 0) > 0;
-}
-
-export async function deleteGenreById(genreId: number): Promise<boolean> {
-  const result = await pool.query(
-    `DELETE FROM genres WHERE id = $1 RETURNING id`,
-    [genreId],
-  );
-
-  return (result.rowCount ?? 0) > 0;
-}
-
-export async function deleteAuthorById(authorId: number): Promise<boolean> {
-  const result = await pool.query(
-    `DELETE FROM authors WHERE id = $1 RETURNING id`,
-    [authorId],
-  );
-
-  return (result.rowCount ?? 0) > 0;
 }

@@ -1,5 +1,4 @@
 import { Response } from "express";
-import { getGenres } from "../db/queries";
 import {
   ErrorRenderOptions,
   RenderOptions,
@@ -7,12 +6,15 @@ import {
 } from "../types/render-options";
 import { capitalize } from "./capitalize";
 import { Entity } from "../types/entity";
+import { getEntities } from "../db/queries";
 
 export async function renderView<T extends RenderOptions = RenderOptions>(
   res: Response,
   options: T,
 ) {
-  const genres: Entity[] = options.navbar === "full" ? await getGenres() : [];
+  const genres: Entity[] =
+    options.navbar === "full" ? await getEntities("genres") : [];
+
   res.render("index", { genres, ...options });
 }
 
